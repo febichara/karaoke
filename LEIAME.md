@@ -19,7 +19,9 @@ opcional) e quem comanda a máquina chama a próxima pelo painel.
   (`karaoke-oba-aoba-default-rtdb.firebaseio.com`, us-central1). O site só
   precisa do `databaseURL`, que está no `config.js`. As regras publicadas lá são
   as de `regras-firebase.json`.
-- **Site:** GitHub Pages, publicado da branch `main`. Para mudar algo, editar e
+- **Site:** https://fila.cw790.com.br (GitHub Pages, repo `febichara/karaoke`,
+  branch `main`; o arquivo `CNAME` define o domínio, e na Hostinger há um CNAME
+  `fila` → `febichara.github.io`). Para mudar algo, editar e
   dar push; o Pages atualiza em cerca de um minuto.
 - Sem `FIREBASE` no `config.js` o site roda em modo demonstração (fila só no
   navegador).
