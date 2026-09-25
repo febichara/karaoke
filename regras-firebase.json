@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "fila": {
+      ".read": true,
+      "$pedido": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['nome', 'musica', 'status', 'ordem']) && newData.child('nome').isString() && newData.child('nome').val().length <= 40 && newData.child('musica').isString() && newData.child('musica').val().length <= 120 && newData.child('status').val().matches(/^(fila|tocando|feita)$/)"
+      }
+    }
+  }
+}

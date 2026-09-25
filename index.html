@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0909">
+<title>OBA: AOBA · Karaokê</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --noite: #0c0909;
+    --asfalto: #161112;
+    --linha: #3a2627;
+    --papel: #f3ebe3;
+    --papel-2: #b8a7a2;
+    --apagado: #6e5d5a;
+    --neon: #ff2d2d;
+    --neon-claro: #ff8a7a;
+    --brilho: 0 0 4px rgba(255, 60, 50, .9), 0 0 14px rgba(255, 45, 45, .6), 0 0 36px rgba(255, 30, 30, .35);
+    --lampiao: #ffc94a;
+    --perigo: #ff6b6b;
+    --display: "Antonio", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+    --corpo: "Noto Sans JP", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--noite);
+    color: var(--papel);
+    font: 16px/1.5 var(--corpo);
+    padding-inline: 16px;
+    padding-block: 0 calc(env(safe-area-inset-bottom, 0px) + 40px);
+    min-height: 100vh;
+  }
+  /* Reflexo vermelho da placa sobre o asfalto molhado */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(900px 520px at 50% 0%, rgba(255, 40, 40, .10), transparent 70%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,.014) 0 1px, transparent 1px 11px),
+      var(--noite);
+  }
+  .wrap { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  body.painel .wrap { max-width: 1240px; }
+
+  /* ---- Placa de entrada: a foto do beco com o letreiro ---- */
+  /* A foto é quadrada e fica no topo; o texto começa logo abaixo do letreiro
+     (o padding em % acompanha a largura, então a proporção se mantém em qualquer tela). */
+  .placa {
+    position: relative; margin-inline: -16px;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 66% 16px 8px;
+    overflow: hidden;
+  }
+  .placa::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 1;
+    background:
+      linear-gradient(180deg, rgba(12,9,9,.3) 0%, rgba(12,9,9,0) 22%, rgba(12,9,9,0) 58%, rgba(12,9,9,.8) 80%, var(--noite) 98%),
+      url("img/beco-800.webp") center / cover no-repeat, #1d1213;
+  }
+  .placa > * { position: relative; z-index: 1; }
+  @media (min-width: 700px) {
+    .placa { margin-inline: 0; }
+    .placa::before { background-image: linear-gradient(180deg, rgba(12,9,9,.3) 0%, rgba(12,9,9,0) 22%, rgba(12,9,9,0) 58%, rgba(12,9,9,.8) 80%, var(--noite) 98%), url("img/beco.webp"); }
+  }
+  /* No painel (tela larga, TV) a foto vira faixa e o título fica sobre ela */
+  body.painel .placa { margin-inline: 0; padding: 150px 16px 24px; }
+  body.painel .placa::before { bottom: 0; aspect-ratio: auto; background-position: center, center 42%; background-size: auto, cover;
+    background-image: linear-gradient(180deg, rgba(12,9,9,.2), rgba(12,9,9,.55) 60%, var(--noite)), url("img/beco.webp"); }
+  .vertical {
+    position: absolute; top: calc(env(safe-area-inset-top, 0px) + 20px); right: 18px;
+    writing-mode: vertical-rl; font-weight: 700; font-size: 15px; letter-spacing: .3em;
+    color: #ffd9d2; text-shadow: var(--brilho);
+  }
+  .data { font-family: var(--display); font-size: 24px; letter-spacing: .08em; color: var(--papel); margin: 0 0 2px; }
+  h1 {
+    font-family: var(--display); font-weight: 700; margin: 0;
+    font-size: clamp(64px, 19vw, 124px); line-height: .92; letter-spacing: .01em; text-transform: uppercase;
+    color: var(--papel); text-shadow: 0 2px 28px rgba(0,0,0,.7);
+    text-wrap: balance;
+  }
+  body.painel h1 { font-size: clamp(56px, 7vw, 92px); }
+  .san { font-weight: 500; font-size: 15px; letter-spacing: .34em; margin: 10px 0 0; padding-left: .34em; }
+  .sub { color: var(--papel-2); margin: 12px auto 0; font-size: 15px; max-width: 30ch; text-wrap: balance; }
+
+  /* O losango do letreiro, aceso */
+  .losango {
+    display: inline-block; width: 1.2em; aspect-ratio: 478 / 400; vertical-align: -.2em;
+    background: var(--neon);
+    -webkit-mask: url("img/losango.png") center / contain no-repeat; mask: url("img/losango.png") center / contain no-repeat;
+    filter: drop-shadow(0 0 3px rgba(255, 60, 50, .9)) drop-shadow(0 0 10px rgba(255, 45, 45, .6));
+  }
+
+  footer.convite .losango { animation: neon-losango 6s infinite; }
+  @keyframes neon-losango {
+    0%, 86%, 100% { opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 60, 50, .9)) drop-shadow(0 0 10px rgba(255, 45, 45, .6)); }
+    87% { opacity: .25; filter: none; }
+    88% { opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 60, 50, .9)) drop-shadow(0 0 10px rgba(255, 45, 45, .6)); }
+    90% { opacity: .35; filter: none; }
+    92% { opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 60, 50, .9)) drop-shadow(0 0 16px rgba(255, 45, 45, .8)); }
+  }
+
+  h2 {
+    font-family: var(--display); font-weight: 600; font-size: 24px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--papel); margin: 0 0 12px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  }
+  h2 .jp { font-family: var(--corpo); font-size: 12px; font-weight: 500; letter-spacing: .2em; color: var(--neon-claro); text-transform: none; }
+  .contagem { color: var(--papel-2); font-weight: 400; font-family: var(--corpo); letter-spacing: 0; text-transform: none; font-size: 14px; }
+  .aviso-demo { border: 1px dashed var(--lampiao); color: var(--lampiao); padding: 10px 14px; border-radius: 4px; font-size: 14px; }
+
+  /* ---- Formulário ---- */
+  form.pedido { background: var(--asfalto); border: 1px solid var(--linha); border-radius: 4px; padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; }
+  form.pedido h2 { margin: 0; }
+  label { display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 13px; letter-spacing: .04em; color: var(--papel-2); }
+  label small { font-weight: 400; letter-spacing: 0; }
+  input {
+    font: inherit; font-size: 16px; letter-spacing: 0; color: var(--papel); background: var(--noite);
+    border: 1px solid var(--linha); border-radius: 3px; padding: 12px 14px; width: 100%;
+  }
+  input::placeholder { color: var(--apagado); }
+  input:focus { outline: 1px solid var(--neon); border-color: var(--neon); box-shadow: 0 0 12px rgba(255, 45, 45, .35); }
+  button, .botao {
+    font: 700 15px var(--corpo); letter-spacing: .06em; border: 0; border-radius: 3px; padding: 13px 18px; cursor: pointer;
+    background: var(--neon); color: #fff; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 0 18px rgba(255, 45, 45, .35); transition: box-shadow .2s, transform .1s;
+  }
+  button:hover:not(:disabled), .botao:hover { box-shadow: 0 0 28px rgba(255, 45, 45, .65); }
+  button:active:not(:disabled) { transform: translateY(1px); }
+  button:focus-visible, .botao:focus-visible { outline: 2px solid var(--papel); outline-offset: 2px; }
+  button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+  .botao.claro { background: var(--papel); color: var(--noite); box-shadow: none; }
+  .botao.leve, button.leve { background: transparent; color: var(--papel-2); border: 1px solid var(--linha); padding: 9px 13px; font-weight: 500; font-size: 14px; letter-spacing: 0; box-shadow: none; }
+  .botao.leve:hover, button.leve:hover:not(:disabled) { color: var(--papel); border-color: var(--papel-2); box-shadow: none; }
+  button.icone { background: transparent; color: var(--papel-2); border: 1px solid var(--linha); padding: 6px 10px; font-size: 14px; letter-spacing: 0; box-shadow: none; }
+  button.icone:hover:not(:disabled) { color: var(--papel); border-color: var(--papel-2); box-shadow: none; }
+  button.icone.perigo:hover { color: var(--perigo); border-color: var(--perigo); }
+  .msg { font-size: 14px; min-height: 1.2em; margin: 0; }
+  .msg.ok { color: var(--papel); }
+  .msg.erro { color: var(--perigo); }
+  .previa { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--papel-2); }
+  .previa img { width: 80px; border-radius: 2px; }
+  .vez { font-family: var(--display); font-size: 28px; letter-spacing: .03em; text-transform: uppercase; margin: 0; text-align: center; }
+  .vez.ja { color: #fff; text-shadow: var(--brilho); }
+
+  /* ---- Tocando agora: letreiro aceso ---- */
+  .agora {
+    position: relative; overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,45,45,.08), transparent 60%), var(--asfalto);
+    border: 2px solid var(--neon); border-radius: 6px; padding: 18px;
+    box-shadow: var(--brilho), inset 0 0 18px rgba(255, 45, 45, .25);
+    display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center;
+    animation: zumbido 8s infinite;
+  }
+  .agora .rotulo { font-weight: 700; font-size: 12px; letter-spacing: .22em; color: var(--neon-claro); text-transform: uppercase; }
+  .agora .musica { font-family: var(--display); font-size: clamp(28px, 7vw, 42px); font-weight: 600; line-height: 1.02; margin: 6px 0 4px; overflow-wrap: anywhere; text-transform: uppercase; }
+  .agora .cantor { color: var(--papel-2); }
+  .agora .cantor b { color: var(--papel); font-weight: 500; }
+  .agora img { width: 160px; max-width: 30vw; border-radius: 2px; display: block; }
+  .agora.vazio { border: 1px solid var(--linha); box-shadow: none; grid-template-columns: 1fr; color: var(--papel-2); animation: none; }
+  .agora.vazio .rotulo { color: var(--papel-2); }
+  @keyframes zumbido {
+    0%, 90%, 100% { box-shadow: var(--brilho), inset 0 0 18px rgba(255,45,45,.25); border-color: var(--neon); }
+    91% { box-shadow: none; border-color: #6a1a1a; }
+    92% { box-shadow: var(--brilho), inset 0 0 18px rgba(255,45,45,.25); border-color: var(--neon); }
+    94% { box-shadow: none; border-color: #6a1a1a; }
+    95% { box-shadow: var(--brilho), inset 0 0 18px rgba(255,45,45,.25); border-color: var(--neon); }
+  }
+  .eq { display: inline-flex; gap: 3px; align-items: flex-end; height: 12px; margin-right: 8px; vertical-align: -1px; }
+  .eq i { width: 3px; background: var(--neon); animation: eq .9s ease-in-out infinite; }
+  .eq i:nth-child(2) { animation-delay: .2s; } .eq i:nth-child(3) { animation-delay: .4s; }
+  @keyframes eq { 0%,100% { height: 3px; } 50% { height: 12px; } }
+  @media (prefers-reduced-motion: reduce) { .eq i { animation: none; height: 9px; } .agora, footer.convite .losango { animation: none; } }
+
+  /* ---- Fila ---- */
+  ol.fila { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  ol.fila li { display: grid; grid-template-columns: 2.4em 44px 1fr auto; gap: 12px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--linha); }
+  .poster { width: 44px; aspect-ratio: 240 / 339; object-fit: cover; border-radius: 2px; display: block; border: 1px solid var(--linha); }
+  ol.fila li:first-child .poster { border-color: var(--neon); box-shadow: 0 0 10px rgba(255, 45, 45, .5); }
+  .agora img.poster-agora { width: 110px; aspect-ratio: 240 / 339; object-fit: cover; }
+  ol.fila li:first-child { border-top: 1px solid var(--linha); }
+  ol.fila li.meu { background: linear-gradient(90deg, rgba(255,45,45,.13), transparent 70%); }
+  .pos { font-family: var(--display); font-size: 30px; font-weight: 600; color: var(--apagado); text-align: center; font-variant-numeric: tabular-nums; line-height: 1; }
+  ol.fila li:first-child .pos { color: #ffd9d2; text-shadow: var(--brilho); }
+  .info { min-width: 0; }
+  .info .m { font-weight: 700; overflow-wrap: anywhere; }
+  .info .c { color: var(--papel-2); font-size: 14px; }
+  .info .c b { color: var(--papel); font-weight: 500; }
+  .tag { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #fff; background: var(--neon); border-radius: 2px; padding: 2px 6px; margin-left: 8px; vertical-align: 2px; }
+  .acoes { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .vazio-fila { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; color: var(--papel-2); padding: 18px; border: 1px dashed var(--linha); border-radius: 4px; }
+  .vazio-fila img { width: 150px; height: auto; }
+  .vazio-fila p { margin: 0; }
+
+  /* ---- Rodapé ---- */
+  footer.convite { text-align: center; color: var(--papel-2); font-size: 13px; display: flex; flex-direction: column; gap: 4px; padding-top: 8px; border-top: 1px solid var(--linha); }
+  footer.convite .numeros { font-family: var(--display); font-size: 30px; letter-spacing: .08em; color: var(--papel); }
+  footer.convite p { margin: 0; }
+
+  /* ---- Painel ---- */
+  .painel-grid { display: grid; grid-template-columns: 1fr 320px; gap: 28px; align-items: start; }
+  .coluna { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+  .lateral { display: flex; flex-direction: column; gap: 18px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+  .qr-caixa { background: var(--asfalto); border: 2px solid var(--neon); box-shadow: var(--brilho); border-radius: 6px; padding: 18px; text-align: center; }
+  .qr-caixa h2 { justify-content: center; }
+  .qr-caixa #qr { background: var(--papel); padding: 12px; border-radius: 3px; display: inline-block; }
+  .qr-caixa #qr img, .qr-caixa #qr canvas { display: block; max-width: 100%; height: auto; }
+  .qr-caixa p { margin: 10px 0 0; font-size: 14px; color: var(--papel-2); overflow-wrap: anywhere; }
+  .controles { display: flex; gap: 10px; flex-wrap: wrap; }
+  .controles .botao, .controles button { flex: 1 1 auto; }
+  .barra-painel { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--papel-2); font-size: 14px; }
+  details.historico summary { cursor: pointer; color: var(--papel-2); }
+  details.historico ol { color: var(--papel-2); font-size: 14px; padding-left: 1.4em; }
+  .pin-caixa { max-width: 360px; width: 100%; margin: 48px auto; display: flex; flex-direction: column; gap: 14px; }
+  .pin-caixa h1 { font-size: 64px; text-align: center; }
+  .confirmar { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: var(--perigo); }
+  @media (max-width: 860px) {
+    .painel-grid { grid-template-columns: 1fr; }
+    .lateral { position: static; }
+  }
+  @media (max-width: 480px) {
+    .agora { grid-template-columns: 1fr; }
+    .agora img { width: 100%; max-width: 100%; }
+    .agora:has(.poster-agora) { grid-template-columns: auto 1fr; }
+    ol.fila li { grid-template-columns: 1.8em 44px 1fr; }
+    ol.fila li .acoes { grid-column: 3; justify-content: flex-start; }
+    .agora img.poster-agora { width: 120px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <p class="sub">Carregando…</p>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  "use strict";
+  const CFG = window.KARAOKE_CONFIG || {};
+  const app = document.getElementById("app");
+  const ehPainel = () => location.hash === "#painel";
+
+  // ---------- utilidades ----------
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  function ls(k, v) {
+    try {
+      if (v === undefined) return localStorage.getItem(k);
+      if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v);
+    } catch (e) { return null; }
+  }
+  function idAparelho() {
+    let id = ls("karaoke.aparelho");
+    if (!id) { id = Math.random().toString(36).slice(2) + Date.now().toString(36); ls("karaoke.aparelho", id); }
+    return id;
+  }
+  const APARELHO = idAparelho();
+
+  function idYoutube(url) {
+    if (!url) return null;
+    const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/|v\/))([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+  // Cada pedido ganha um dos 8 pôsteres da festa, em sequência (1, 2, … 8, 1, …).
+  const N_POSTERS = 8;
+  const posterDe = (it) => `img/posters/p${it.poster || 1}.webp`;
+  const miniatura = (vid) => vid ? `https://i.ytimg.com/vi/${vid}/mqdefault.jpg` : null;
+  function linkTocar(item) {
+    if (item.videoId) return `https://www.youtube.com/watch?v=${item.videoId}`;
+    return "https://www.youtube.com/results?search_query=" + encodeURIComponent(item.musica + " karaoke");
+  }
+  function carregarScript(src) {
+    return new Promise((ok, falha) => {
+      const s = document.createElement("script");
+      s.src = src; s.onload = ok; s.onerror = () => falha(new Error("Não carregou " + src));
+      document.head.appendChild(s);
+    });
+  }
+
+  // ---------- armazenamento ----------
+  // Interface: assinar(cb), adicionar(item), atualizar(id, patch), remover(id)
+  function backendLocal() {
+    const CHAVE = "karaoke.demo.fila";
+    // Cópia em memória para quando o navegador não deixa usar o localStorage.
+    let memoria = "{}";
+    const ler = () => { try { return JSON.parse(ls(CHAVE) || memoria); } catch (e) { return {}; } };
+    const ouvintes = [];
+    const avisar = () => { const d = ler(); ouvintes.forEach((cb) => cb(d)); };
+    const gravar = (d) => { memoria = JSON.stringify(d); ls(CHAVE, memoria); avisar(); };
+    window.addEventListener("storage", (e) => { if (e.key === CHAVE) avisar(); });
+    return {
+      demo: true,
+      assinar(cb) { ouvintes.push(cb); cb(ler()); },
+      async adicionar(item) { const d = ler(); const id = "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); d[id] = item; gravar(d); },
+      async atualizar(id, patch) { const d = ler(); if (d[id]) { Object.assign(d[id], patch); gravar(d); } },
+      async remover(id) { const d = ler(); delete d[id]; gravar(d); },
+    };
+  }
+  async function backendFirebase(conf) {
+    const V = "10.12.2";
+    await carregarScript(`https://www.gstatic.com/firebasejs/${V}/firebase-app-compat.js`);
+    await carregarScript(`https://www.gstatic.com/firebasejs/${V}/firebase-database-compat.js`);
+    firebase.initializeApp(conf);
+    const ref = firebase.database().ref("fila");
+    return {
+      demo: false,
+      assinar(cb) { ref.on("value", (snap) => cb(snap.val() || {}), (err) => mostrarErroGeral(err)); },
+      adicionar(item) { return ref.push(item); },
+      atualizar(id, patch) { return ref.child(id).update(patch); },
+      remover(id) { return ref.child(id).remove(); },
+    };
+  }
+
+  // ---------- estado ----------
+  let db = null;
+  let dados = {};
+  let painelLiberado = ls("karaoke.painel") === "ok";
+  let confirmandoRemocao = null;
+  let mensagem = { txt: "", tipo: "" };
+
+  function listar() {
+    const todos = Object.entries(dados).map(([id, v]) => ({ id, ...v }));
+    const fila = todos.filter((x) => x.status === "fila").sort((a, b) => a.ordem - b.ordem);
+    const tocando = todos.filter((x) => x.status === "tocando").sort((a, b) => (b.inicio || 0) - (a.inicio || 0))[0] || null;
+    const feitas = todos.filter((x) => x.status === "feita").sort((a, b) => (b.fim || 0) - (a.fim || 0));
+    return { fila, tocando, feitas };
+  }
+
+  // ---------- telas ----------
+  function blocoPlaca(sub) {
+    return `<header class="placa">
+      <span class="vertical" aria-hidden="true">カラオケ</span>
+      <p class="data">${esc(CFG.data || "")}</p>
+      <h1>${esc(CFG.titulo || "Karaokê")}</h1>
+      ${CFG.subtitulo ? `<p class="san">${esc(CFG.subtitulo)}</p>` : ""}
+      ${sub ? `<p class="sub">${sub}</p>` : ""}
+    </header>`;
+  }
+
+  function blocoAgora(tocando, comControles) {
+    if (!tocando) {
+      return `<section class="agora vazio" aria-live="polite"><div>
+        <div class="rotulo">Tocando agora</div>
+        <div>Microfone livre. ${comControles ? "Aperte “Chamar próxima” para começar." : "Faça seu pedido e seja o primeiro a passar vergonha."}</div>
+      </div></section>`;
+    }
+    const img = miniatura(tocando.videoId);
+    return `<section class="agora" aria-live="polite">
+      ${img ? `<img src="${img}" alt="">` : `<img class="poster-agora" src="${posterDe(tocando)}" alt="">`}
+      <div>
+        <div class="rotulo"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Tocando agora · いま歌っている</div>
+        <div class="musica">${esc(tocando.musica)}</div>
+        <div class="cantor">no microfone: <b>${esc(tocando.nome)}</b></div>
+        ${comControles ? `<div class="controles" style="margin-top:14px">
+            <a class="botao claro" href="${esc(linkTocar(tocando))}" target="_blank" rel="noopener">▶ Abrir no YouTube</a>
+          </div>` : ""}
+      </div>
+    </section>`;
+  }
+
+  function itemFila(it, i, comControles, total) {
+    const meu = it.aparelho === APARELHO;
+    let acoes = "";
+    if (comControles) {
+      acoes = confirmandoRemocao === it.id
+        ? `<span class="confirmar">Tirar da fila?
+            <button class="icone perigo" data-acao="remover-sim" data-id="${it.id}">Sim</button>
+            <button class="icone" data-acao="remover-nao">Não</button></span>`
+        : `<button class="icone" data-acao="subir" data-id="${it.id}" ${i === 0 ? "disabled" : ""} aria-label="Subir">↑</button>
+           <button class="icone" data-acao="descer" data-id="${it.id}" ${i === total - 1 ? "disabled" : ""} aria-label="Descer">↓</button>
+           <button class="icone" data-acao="agora" data-id="${it.id}" title="Cantar agora">▶</button>
+           <button class="icone perigo" data-acao="remover" data-id="${it.id}" aria-label="Remover">✕</button>`;
+    } else if (meu) {
+      acoes = confirmandoRemocao === it.id
+        ? `<span class="confirmar">Cancelar?
+            <button class="icone perigo" data-acao="remover-sim" data-id="${it.id}">Sim</button>
+            <button class="icone" data-acao="remover-nao">Não</button></span>`
+        : `<button class="icone perigo" data-acao="remover" data-id="${it.id}">Cancelar</button>`;
+    }
+    return `<li class="${meu && !comControles ? "meu" : ""}">
+      <span class="pos">${i + 1}</span>
+      <img class="poster" src="${posterDe(it)}" alt="" loading="lazy">
+      <div class="info">
+        <div class="m">${esc(it.musica)}${meu && !comControles ? '<span class="tag">seu</span>' : ""}</div>
+        <div class="c"><b>${esc(it.nome)}</b>${it.videoId ? " · link do YouTube" : ""}</div>
+      </div>
+      ${acoes ? `<div class="acoes">${acoes}</div>` : ""}
+    </li>`;
+  }
+
+  function blocoFila(fila, comControles) {
+    const titulo = `<h2>Próximas <span class="jp">次の曲</span> <span class="contagem">${fila.length} na fila</span></h2>`;
+    if (!fila.length) {
+      return `<section>${titulo}<div class="vazio-fila">
+        <img src="img/lulu.webp" alt="" width="150" height="156">
+        <p>A fila está vazia. Alguém tem que começar!</p>
+      </div></section>`;
+    }
+    return `<section>${titulo}<ol class="fila">${fila.map((it, i) => itemFila(it, i, comControles, fila.length)).join("")}</ol></section>`;
+  }
+
+  function avisoDemo() {
+    return db && db.demo
+      ? `<div class="aviso-demo">Modo demonstração: a fila fica só neste navegador. Para os convidados pedirem pelo celular, configure o Firebase no <code>config.js</code>.</div>`
+      : "";
+  }
+
+  function rodape() {
+    return `<footer class="convite">
+      <span class="numeros"><span class="losango" aria-hidden="true"></span> 33 · 30 · 3</span>
+      ${CFG.local ? `<p>${esc(CFG.local)}</p>` : ""}
+      ${CFG.assinatura ? `<p>${esc(CFG.assinatura)}</p>` : ""}
+    </footer>`;
+  }
+
+  function telaConvidado() {
+    const { fila, tocando } = listar();
+    const meus = fila.filter((x) => x.aparelho === APARELHO);
+    const proximoMeu = fila.findIndex((x) => x.aparelho === APARELHO);
+    const nomeSalvo = ls("karaoke.nome") || "";
+    const limite = CFG.limitePorPessoa || 3;
+    const cheio = meus.length >= limite;
+    const rascunho = capturarRascunho();
+
+    app.innerHTML = `
+      ${blocoPlaca("")}
+      ${avisoDemo()}
+      ${blocoAgora(tocando, false)}
+      ${proximoMeu >= 0 ? `<p class="vez ${proximoMeu === 0 ? "ja" : ""}">${proximoMeu === 0 ? "Você é o próximo. Aquece a voz!" : `Faltam ${proximoMeu} música${proximoMeu > 1 ? "s" : ""} até a sua vez`}</p>` : ""}
+      <form class="pedido" id="form-pedido" novalidate>
+        <h2>Pedir música <span class="jp">リクエスト</span></h2>
+        <label>Seu nome
+          <input id="f-nome" name="nome" autocomplete="given-name" maxlength="40" required value="${esc(rascunho.nome ?? nomeSalvo)}">
+        </label>
+        <label>Música e artista
+          <input id="f-musica" name="musica" maxlength="120" required placeholder="Evidências – Chitãozinho & Xororó" value="${esc(rascunho.musica ?? "")}">
+        </label>
+        <label>Link do YouTube <small>(opcional: cole o link do vídeo de karaokê)</small>
+          <input id="f-link" name="link" inputmode="url" placeholder="https://youtu.be/…" value="${esc(rascunho.link ?? "")}">
+        </label>
+        <div class="previa" id="previa"></div>
+        <button type="submit" ${cheio ? "disabled" : ""}>${cheio ? `Você já tem ${limite} pedidos na fila` : "Entrar na fila"}</button>
+        <p class="msg ${mensagem.tipo}" id="msg" role="status">${esc(mensagem.txt)}</p>
+      </form>
+      ${blocoFila(fila, false)}
+      ${rodape()}
+    `;
+    ligarPrevia();
+    if (rascunho.foco) { const el = document.getElementById(rascunho.foco); if (el) { el.focus(); try { el.setSelectionRange(rascunho.sel, rascunho.sel); } catch (e) {} } }
+  }
+
+  // A fila chega em tempo real e redesenha a tela; isso guarda o que a pessoa estava digitando.
+  function capturarRascunho() {
+    const r = {};
+    ["nome", "musica", "link"].forEach((k) => { const el = document.getElementById("f-" + k); if (el) r[k] = el.value; });
+    const a = document.activeElement;
+    if (a && a.id && a.id.startsWith("f-")) { r.foco = a.id; r.sel = a.selectionStart; }
+    return r;
+  }
+
+  function ligarPrevia() {
+    const link = document.getElementById("f-link");
+    const previa = document.getElementById("previa");
+    if (!link) return;
+    const atualizar = () => {
+      const v = link.value.trim();
+      const vid = idYoutube(v);
+      previa.innerHTML = !v ? "" : vid
+        ? `<img src="${miniatura(vid)}" alt=""> <span>Vídeo reconhecido ✓</span>`
+        : `<span style="color:var(--perigo)">Esse não parece um link do YouTube. Pode deixar em branco.</span>`;
+    };
+    link.addEventListener("input", atualizar);
+    atualizar();
+  }
+
+  function telaPin() {
+    app.innerHTML = `
+      <form class="pin-caixa" id="form-pin">
+        <h1>Painel</h1>
+        <label>Senha do painel <input id="f-pin" type="password" autocomplete="off" autocapitalize="none"></label>
+        <button type="submit">Entrar</button>
+        <p class="msg erro" id="msg-pin" role="status"></p>
+        <a href="#" class="botao leve">Voltar para a fila</a>
+      </form>`;
+    document.getElementById("f-pin").focus();
+  }
+
+  function telaPainel() {
+    if (!painelLiberado) return telaPin();
+    const { fila, tocando, feitas } = listar();
+    const urlConvidado = location.href.split("#")[0];
+    app.innerHTML = `
+      ${blocoPlaca("")}
+      <div class="barra-painel"><span>Painel de quem comanda a máquina</span><a href="#" class="botao leve">Ver como convidado</a></div>
+      ${avisoDemo()}
+      <div class="painel-grid">
+        <div class="coluna">
+          ${blocoAgora(tocando, true)}
+          <div class="controles">
+            <button data-acao="proxima" ${fila.length ? "" : "disabled"}>⏭ Chamar próxima${fila[0] ? `: ${esc(fila[0].nome)}` : ""}</button>
+            ${tocando ? `<button class="leve" data-acao="encerrar">Terminar sem chamar outra</button>` : ""}
+          </div>
+          ${blocoFila(fila, true)}
+          <details class="historico">
+            <summary>Já cantadas (${feitas.length})</summary>
+            <ol>${feitas.map((x) => `<li>${esc(x.musica)} · ${esc(x.nome)}</li>`).join("")}</ol>
+            ${feitas.length ? `<button class="leve" data-acao="limpar-historico">Apagar histórico</button>` : ""}
+          </details>
+        </div>
+        <aside class="lateral">
+          <div class="qr-caixa">
+            <h2>Peça sua música</h2>
+            <div id="qr"></div>
+            <p>Aponte a câmera do celular<br>ou acesse <b>${esc(urlConvidado.replace(/^https?:\/\//, ""))}</b></p>
+          </div>
+        </aside>
+      </div>`;
+    desenharQR(urlConvidado);
+  }
+
+  let qrCarregado = null;
+  async function desenharQR(url) {
+    const el = document.getElementById("qr");
+    if (!el) return;
+    try {
+      if (!window.QRCode) {
+        qrCarregado = qrCarregado || carregarScript("https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js");
+        await qrCarregado;
+      }
+      el.innerHTML = "";
+      new QRCode(el, { text: url, width: 240, height: 240, colorDark: "#0c0909", colorLight: "#f3ebe3", correctLevel: QRCode.CorrectLevel.M });
+    } catch (e) { el.textContent = "QR code indisponível"; }
+  }
+
+  function desenhar() {
+    document.body.classList.toggle("painel", ehPainel());
+    if (ehPainel()) telaPainel(); else telaConvidado();
+  }
+
+  function mostrarErroGeral(err) {
+    app.innerHTML = `${blocoPlaca("")}
+      <p class="msg erro">Não consegui conectar à fila (${esc(err && err.message || err)}). Confira a internet e recarregue a página.</p>`;
+  }
+
+  // ---------- ações ----------
+  async function pedir(form) {
+    const nome = form.nome.value.trim();
+    const musica = form.musica.value.trim();
+    const link = form.link.value.trim();
+    const vid = idYoutube(link);
+    if (!nome || !musica) { mensagem = { txt: "Preencha seu nome e a música.", tipo: "erro" }; return desenhar(); }
+    if (link && !vid) { mensagem = { txt: "O link não é do YouTube. Corrija ou apague o campo.", tipo: "erro" }; return desenhar(); }
+    const { fila } = listar();
+    if (fila.filter((x) => x.aparelho === APARELHO).length >= (CFG.limitePorPessoa || 3)) return;
+    ls("karaoke.nome", nome);
+    const botao = form.querySelector("button[type=submit]");
+    botao.disabled = true;
+    try {
+      form.musica.value = ""; form.link.value = "";
+      mensagem = { txt: `Kampai! “${musica}” entrou na fila na posição ${fila.length + 1}.`, tipo: "ok" };
+      await db.adicionar({ nome, musica, videoId: vid || null, status: "fila", ordem: Date.now(), criadoEm: Date.now(), aparelho: APARELHO, poster: proximoPoster() });
+    } catch (e) {
+      mensagem = { txt: "Não entrou na fila: " + (e.message || e) + ". Tente de novo.", tipo: "erro" };
+      desenhar();
+    }
+  }
+
+  function proximoPoster() {
+    const ultimo = Object.values(dados).sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0))[0];
+    return ultimo && ultimo.poster ? (ultimo.poster % N_POSTERS) + 1 : 1;
+  }
+
+  async function chamarProxima(id) {
+    const { fila, tocando } = listar();
+    const alvo = id ? fila.find((x) => x.id === id) : fila[0];
+    if (tocando) await db.atualizar(tocando.id, { status: "feita", fim: Date.now() });
+    if (alvo) {
+      await db.atualizar(alvo.id, { status: "tocando", inicio: Date.now() });
+      window.open(linkTocar(alvo), "karaoke-youtube", "noopener");
+    }
+  }
+
+  async function mover(id, delta) {
+    const { fila } = listar();
+    const i = fila.findIndex((x) => x.id === id);
+    const j = i + delta;
+    if (i < 0 || j < 0 || j >= fila.length) return;
+    const a = fila[i], b = fila[j];
+    await Promise.all([db.atualizar(a.id, { ordem: b.ordem }), db.atualizar(b.id, { ordem: a.ordem })]);
+  }
+
+  app.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-acao]");
+    if (!b) return;
+    const id = b.dataset.id;
+    switch (b.dataset.acao) {
+      case "proxima": return chamarProxima();
+      case "agora": return chamarProxima(id);
+      case "encerrar": { const { tocando } = listar(); if (tocando) await db.atualizar(tocando.id, { status: "feita", fim: Date.now() }); return; }
+      case "subir": return mover(id, -1);
+      case "descer": return mover(id, +1);
+      case "remover": confirmandoRemocao = id; return desenhar();
+      case "remover-nao": confirmandoRemocao = null; return desenhar();
+      case "remover-sim": confirmandoRemocao = null; mensagem = { txt: "", tipo: "" }; return db.remover(id);
+      case "limpar-historico": { const { feitas } = listar(); for (const f of feitas) await db.remover(f.id); return; }
+    }
+  });
+
+  app.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (e.target.id === "form-pedido") return pedir(e.target);
+    if (e.target.id === "form-pin") {
+      if (document.getElementById("f-pin").value.trim().toLowerCase() === String(CFG.pinPainel).toLowerCase()) {
+        painelLiberado = true; ls("karaoke.painel", "ok"); desenhar();
+      } else {
+        document.getElementById("msg-pin").textContent = "Senha errada.";
+      }
+    }
+  });
+
+  window.addEventListener("hashchange", () => { confirmandoRemocao = null; mensagem = { txt: "", tipo: "" }; desenhar(); });
+
+  // ---------- início ----------
+  (async () => {
+    try {
+      db = CFG.FIREBASE ? await backendFirebase(CFG.FIREBASE) : backendLocal();
+      db.assinar((d) => { dados = d || {}; desenhar(); });
+    } catch (err) { mostrarErroGeral(err); }
+  })();
+})();
+</script>
+</body>
+</html>
