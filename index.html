@@ -347,9 +347,8 @@
         <div>Microfone livre. ${comControles ? "Aperte “Chamar próxima” para começar." : "Faça seu pedido e seja o primeiro a passar vergonha."}</div>
       </div></section>`;
     }
-    const img = miniatura(tocando.videoId);
     return `<section class="agora" aria-live="polite">
-      ${img ? `<img src="${img}" alt="">` : `<img class="poster-agora" src="${posterDe(tocando)}" alt="">`}
+      <img class="poster-agora" src="${posterDe(tocando)}" alt="">
       <div>
         <div class="rotulo"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Tocando agora · いま歌っている</div>
         <div class="musica">${esc(tocando.musica)}</div>
