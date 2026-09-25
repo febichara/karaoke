@@ -12,6 +12,14 @@ opcional) e quem comanda a máquina chama a próxima pelo painel.
   (ou uma busca "<música> karaoke", quando o pedido veio sem link).
   Dá para subir/descer, pôr para cantar agora ou tirar da fila.
 - Cada pedido ganha um dos 8 pôsteres da festa (`img/posters/`), em sequência.
+- Pedido pode ter até 2 parceiros ("Vai cantar com alguém?"), gravados em `parceiros`.
+- **Reações:** barra de emojis no rodapé do celular (`reacoes` no `config.js`). Flutuam
+  nos celulares e no telão, nunca no painel. Cada toque fica gravado em `/reacoes`
+  (emoji, aparelho, nome, pedido que estava tocando, hora do servidor).
+- **Telão:** `#telao` (botão no painel). Tocando agora grande, próximas 3, QR e reações.
+- No Android o celular vibra quando a pessoa vira a próxima e quando chega a vez.
+- Nada é apagado: cancelar/tirar da fila vira status `cancelada`/`removida`, para a
+  retrospectiva.
 
 ## Onde as coisas estão
 

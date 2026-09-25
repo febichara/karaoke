@@ -211,6 +211,46 @@
   .qr-caixa p { margin: 10px 0 0; font-size: 14px; color: var(--papel-2); overflow-wrap: anywhere; }
   .controles { display: flex; gap: 10px; flex-wrap: wrap; }
   .controles .botao, .controles button { flex: 1 1 auto; }
+  /* ---- Reações ---- */
+  #chuva { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
+  #chuva span { position: absolute; bottom: -60px; line-height: 1; animation: subir 2.8s ease-out forwards; will-change: transform, opacity;
+    filter: drop-shadow(0 0 8px rgba(255, 45, 45, .45)); }
+  #chuva span.texto { font-family: var(--display); font-weight: 700; color: #fff; text-shadow: var(--brilho); white-space: nowrap; }
+  @keyframes subir {
+    0% { transform: translate(0, 0) scale(.6); opacity: 0; }
+    12% { opacity: 1; transform: translate(0, -12vh) scale(1.1); }
+    100% { transform: translate(var(--deriva, 0px), -95vh) scale(1); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { #chuva span { animation-duration: 1.6s; } }
+  .barra-reacoes {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    padding: 8px 12px calc(env(safe-area-inset-bottom, 0px) + 8px);
+    background: linear-gradient(180deg, rgba(12,9,9,0), rgba(12,9,9,.92) 30%);
+    display: flex; justify-content: safe center; gap: 4px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+  }
+  .barra-reacoes button { flex: none; background: var(--asfalto); border: 1px solid var(--linha); box-shadow: none; font-size: 19px; padding: 7px 4px; line-height: 1; min-width: 33px; letter-spacing: 0; }
+  .barra-reacoes button.texto { font: 700 14px var(--display); padding-inline: 6px; letter-spacing: .06em; color: var(--papel); }
+  .barra-reacoes button:active { transform: scale(.9); border-color: var(--neon); }
+  body.com-reacoes { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 70px); }
+  .vez.sua { font-size: 40px; color: #fff; text-shadow: var(--brilho); }
+  .dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  /* ---- Telão ---- */
+  body.telao { padding-block: 24px; overflow: hidden; }
+  body.telao .wrap { max-width: 1500px; }
+  .telao-grid { display: grid; grid-template-columns: 1fr 360px; gap: 36px; align-items: start; }
+  .telao-topo { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .telao-topo h1 { font-size: clamp(48px, 5vw, 80px); }
+  .telao-topo .san { margin: 0; }
+  .telao .agora { grid-template-columns: auto 1fr; padding: 28px; gap: 32px; }
+  .telao .agora img.poster-agora { width: clamp(180px, 18vw, 280px); }
+  .telao .agora .musica { font-size: clamp(44px, 5vw, 84px); }
+  .telao .agora .cantor { font-size: clamp(20px, 2vw, 30px); }
+  .telao .agora .rotulo { font-size: 16px; }
+  .telao ol.fila li { grid-template-columns: 2.4em 56px 1fr; font-size: 20px; }
+  .telao ol.fila .poster { width: 56px; }
+  .sair-telao { position: fixed; right: 12px; bottom: 10px; font-size: 12px; color: var(--apagado); text-decoration: none; z-index: 60; }
+
   /* Chave liga/desliga */
   .chave { flex-direction: row; align-items: center; gap: 12px; cursor: pointer; font-size: 14px; color: var(--papel); letter-spacing: 0; }
   .chave small { color: var(--papel-2); }
@@ -241,6 +281,7 @@
 </style>
 </head>
 <body>
+<div id="chuva" aria-hidden="true"></div>
 <div class="wrap" id="app">
   <p class="sub">Carregando…</p>
 </div>
@@ -252,6 +293,7 @@
   const CFG = window.KARAOKE_CONFIG || {};
   const app = document.getElementById("app");
   const ehPainel = () => location.hash === "#painel";
+  const ehTelao = () => location.hash === "#telao";
 
   // ---------- utilidades ----------
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -306,20 +348,31 @@
       async adicionar(item) { const d = ler(); const id = "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); d[id] = item; gravar(d); },
       async atualizar(id, patch) { const d = ler(); if (d[id]) { Object.assign(d[id], patch); gravar(d); } },
       async remover(id) { const d = ler(); delete d[id]; gravar(d); },
+      reagir(r) { ouvintesR.forEach((cb) => cb({ ...r, aparelho: "eco-local" })); },
+      ouvirReacoes(cb) { ouvintesR.push(cb); },
     };
   }
+  const ouvintesR = [];
   async function backendFirebase(conf) {
     const V = "10.12.2";
     await carregarScript(`https://www.gstatic.com/firebasejs/${V}/firebase-app-compat.js`);
     await carregarScript(`https://www.gstatic.com/firebasejs/${V}/firebase-database-compat.js`);
     firebase.initializeApp(conf);
     const ref = firebase.database().ref("fila");
+    const refR = firebase.database().ref("reacoes");
     return {
       demo: false,
       assinar(cb) { ref.on("value", (snap) => cb(snap.val() || {}), (err) => mostrarErroGeral(err)); },
       adicionar(item) { return ref.push(item); },
       atualizar(id, patch) { return ref.child(id).update(patch); },
       remover(id) { return ref.child(id).remove(); },
+      // Reações ficam gravadas (para a retrospectiva); só as novas chegam na tela.
+      reagir(r) { return refR.push({ ...r, t: firebase.database.ServerValue.TIMESTAMP }); },
+      async ouvirReacoes(cb) {
+        const ultima = await refR.orderByKey().limitToLast(1).once("value");
+        let chave = null; ultima.forEach((c) => { chave = c.key; });
+        (chave ? refR.orderByKey().startAfter(chave) : refR).on("child_added", (c) => cb(c.val()));
+      },
     };
   }
 
@@ -331,6 +384,14 @@
   let mensagem = { txt: "", tipo: "" };
   // Preferência só deste aparelho (o notebook do painel): abrir o YouTube ao chamar a próxima.
   let abrirYoutube = ls("karaoke.abrirYoutube") !== "nao";
+  // Para vibrar só quando a situação muda (não a cada redesenho).
+  let aviso = { proximo: false, vez: false, primeiro: true };
+
+  // "Ana", "Ana & Bia", "Ana, Bia & Caio"
+  function cantores(it) {
+    const n = [it.nome, ...(it.parceiros || [])].filter(Boolean);
+    return n.length < 2 ? (n[0] || "") : n.slice(0, -1).join(", ") + " & " + n[n.length - 1];
+  }
 
   function listar() {
     const todos = Object.entries(dados).map(([id, v]) => ({ id, ...v }));
@@ -363,7 +424,7 @@
       <div>
         <div class="rotulo"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Tocando agora · いま歌っている</div>
         <div class="musica">${esc(tocando.musica)}</div>
-        <div class="cantor">no microfone: <b>${esc(tocando.nome)}</b></div>
+        <div class="cantor">no microfone: <b>${esc(cantores(tocando))}</b></div>
         ${comControles ? `<div class="controles" style="margin-top:14px">
             <a class="botao claro" href="${esc(linkTocar(tocando))}" target="_blank" rel="noopener">▶ Abrir no YouTube</a>
             ${tocando.videoId ? `<button class="leve" data-acao="copiar" data-texto="${esc(linkTocar(tocando))}">Copiar link</button>` : ""}
@@ -397,7 +458,7 @@
       <img class="poster" src="${posterDe(it)}" alt="" loading="lazy">
       <div class="info">
         <div class="m">${esc(it.musica)}${meu && !comControles ? '<span class="tag">seu</span>' : ""}</div>
-        <div class="c"><b>${esc(it.nome)}</b>${it.videoId ? " · link do YouTube" : ""}</div>
+        <div class="c"><b>${esc(cantores(it))}</b>${it.videoId && comControles ? " · link do YouTube" : ""}</div>
       </div>
       ${acoes ? `<div class="acoes">${acoes}</div>` : ""}
     </li>`;
@@ -436,16 +497,25 @@
     const limite = CFG.limitePorPessoa || 3;
     const cheio = meus.length >= limite;
     const rascunho = capturarRascunho();
+    const minhaVez = !!(tocando && tocando.aparelho === APARELHO);
+    avisarMudanca(proximoMeu === 0, minhaVez);
 
     app.innerHTML = `
       ${blocoPlaca("")}
       ${avisoDemo()}
+      ${minhaVez ? `<p class="vez sua">É a sua vez! 🎤</p>` : ""}
       ${blocoAgora(tocando, false)}
       ${proximoMeu >= 0 ? `<p class="vez ${proximoMeu === 0 ? "ja" : ""}">${proximoMeu === 0 ? "Você é o próximo. Aquece a voz!" : `Faltam ${proximoMeu} música${proximoMeu > 1 ? "s" : ""} até a sua vez`}</p>` : ""}
       <form class="pedido" id="form-pedido" novalidate>
         <h2>Pedir música <span class="jp">リクエスト</span></h2>
         <label>Seu nome
           <input id="f-nome" name="nome" autocomplete="given-name" maxlength="40" required value="${esc(rascunho.nome ?? nomeSalvo)}">
+        </label>
+        <label>Vai cantar com alguém? <small>(opcional, até 2 pessoas)</small>
+          <span class="dupla">
+            <input id="f-par1" name="par1" maxlength="40" placeholder="Nome" value="${esc(rascunho.par1 ?? "")}">
+            <input id="f-par2" name="par2" maxlength="40" placeholder="Nome" value="${esc(rascunho.par2 ?? "")}">
+          </span>
         </label>
         <label>Música e artista
           <input id="f-musica" name="musica" maxlength="120" required placeholder="Evidências – Chitãozinho & Xororó" value="${esc(rascunho.musica ?? "")}">
@@ -459,6 +529,7 @@
       </form>
       ${blocoFila(fila, false)}
       ${rodape()}
+      ${barraReacoes()}
     `;
     ligarPrevia();
     if (rascunho.foco) { const el = document.getElementById(rascunho.foco); if (el) { el.focus(); try { el.setSelectionRange(rascunho.sel, rascunho.sel); } catch (e) {} } }
@@ -467,7 +538,7 @@
   // A fila chega em tempo real e redesenha a tela; isso guarda o que a pessoa estava digitando.
   function capturarRascunho() {
     const r = {};
-    ["nome", "musica", "link"].forEach((k) => { const el = document.getElementById("f-" + k); if (el) r[k] = el.value; });
+    ["nome", "par1", "par2", "musica", "link"].forEach((k) => { const el = document.getElementById("f-" + k); if (el) r[k] = el.value; });
     const a = document.activeElement;
     if (a && a.id && a.id.startsWith("f-")) { r.foco = a.id; r.sel = a.selectionStart; }
     return r;
@@ -506,13 +577,14 @@
     const urlConvidado = location.origin + location.pathname;
     app.innerHTML = `
       ${blocoPlaca("")}
-      <div class="barra-painel"><span>Painel de quem comanda a máquina</span><a href="#" class="botao leve">Ver como convidado</a></div>
+      <div class="barra-painel"><span>Painel de quem comanda a máquina</span>
+        <span class="controles"><a href="#telao" target="_blank" rel="noopener" class="botao leve">📺 Abrir modo telão</a><a href="#" class="botao leve">Ver como convidado</a></span></div>
       ${avisoDemo()}
       <div class="painel-grid">
         <div class="coluna">
           ${blocoAgora(tocando, true)}
           <div class="controles">
-            <button data-acao="proxima" ${fila.length ? "" : "disabled"}>⏭ Chamar próxima${fila[0] ? `: ${esc(fila[0].nome)}` : ""}</button>
+            <button data-acao="proxima" ${fila.length ? "" : "disabled"}>⏭ Chamar próxima${fila[0] ? `: ${esc(cantores(fila[0]))}` : ""}</button>
             ${tocando ? `<button class="leve" data-acao="encerrar">Terminar sem chamar outra</button>` : ""}
           </div>
           <label class="chave">
@@ -523,8 +595,7 @@
           ${blocoFila(fila, true)}
           <details class="historico">
             <summary>Já cantadas (${feitas.length})</summary>
-            <ol>${feitas.map((x) => `<li>${esc(x.musica)} · ${esc(x.nome)}</li>`).join("")}</ol>
-            ${feitas.length ? `<button class="leve" data-acao="limpar-historico">Apagar histórico</button>` : ""}
+            <ol>${feitas.map((x) => `<li>${esc(x.musica)} · ${esc(cantores(x))}</li>`).join("")}</ol>
           </details>
         </div>
         <aside class="lateral">
@@ -538,8 +609,34 @@
     desenharQR(urlConvidado);
   }
 
+  function telaTelao() {
+    const { fila, tocando } = listar();
+    const url = location.origin + location.pathname;
+    const proximas = blocoFila(fila.slice(0, 3), false).replace(`${Math.min(fila.length, 3)} na fila`, `${fila.length} na fila`);
+    app.innerHTML = `
+      <div class="telao-topo">
+        <h1>${esc(CFG.titulo || "Karaokê")}</h1>
+        ${CFG.subtitulo ? `<p class="san">${esc(CFG.subtitulo)}</p>` : ""}
+      </div>
+      <div class="telao-grid">
+        <div class="coluna">
+          ${blocoAgora(tocando, false)}
+          ${proximas}
+        </div>
+        <aside class="lateral">
+          <div class="qr-caixa">
+            <h2>Peça sua música</h2>
+            <div id="qr"></div>
+            <p>e mande reações pelo celular<br><b>${esc(url.replace(/^https?:[/][/]/, ""))}</b></p>
+          </div>
+        </aside>
+      </div>
+      <a class="sair-telao" href="#painel">sair do telão</a>`;
+    desenharQR(url, 320);
+  }
+
   let qrCarregado = null;
-  async function desenharQR(url) {
+  async function desenharQR(url, tamanho = 260) {
     const el = document.getElementById("qr");
     if (!el) return;
     try {
@@ -551,7 +648,7 @@
       // Pontos quadrados, só preto, com o contorno do lulu do lámen no meio.
       // A correção de erro alta (H) é o que permite cobrir o centro com o desenho.
       new QRCodeStyling({
-        width: 260, height: 260, type: "svg", data: url, margin: 0, image: "img/lulu-contorno.png",
+        width: tamanho, height: tamanho, type: "svg", data: url, margin: 0, image: "img/lulu-contorno.png",
         qrOptions: { errorCorrectionLevel: "H" },
         dotsOptions: { type: "square", color: "#0c0909" },
         cornersSquareOptions: { type: "square", color: "#0c0909" },
@@ -564,7 +661,9 @@
 
   function desenhar() {
     document.body.classList.toggle("painel", ehPainel());
-    if (ehPainel()) telaPainel(); else telaConvidado();
+    document.body.classList.toggle("telao", ehTelao());
+    document.body.classList.toggle("com-reacoes", !ehPainel() && !ehTelao());
+    if (ehTelao()) telaTelao(); else if (ehPainel()) telaPainel(); else telaConvidado();
   }
 
   function mostrarErroGeral(err) {
@@ -578,6 +677,7 @@
     const musica = form.musica.value.trim();
     const link = form.link.value.trim();
     const vid = idYoutube(link);
+    const parceiros = [form.par1.value.trim(), form.par2.value.trim()].filter(Boolean);
     if (!nome || !musica) { mensagem = { txt: "Preencha seu nome e a música.", tipo: "erro" }; return desenhar(); }
     if (link && !vid) { mensagem = { txt: "O link não é do YouTube. Corrija ou apague o campo.", tipo: "erro" }; return desenhar(); }
     const { fila } = listar();
@@ -586,9 +686,9 @@
     const botao = form.querySelector("button[type=submit]");
     botao.disabled = true;
     try {
-      form.musica.value = ""; form.link.value = "";
+      form.musica.value = ""; form.link.value = ""; form.par1.value = ""; form.par2.value = "";
       mensagem = { txt: `Kampai! “${musica}” entrou na fila na posição ${fila.length + 1}.`, tipo: "ok" };
-      await db.adicionar({ nome, musica, videoId: vid || null, status: "fila", ordem: Date.now(), criadoEm: Date.now(), aparelho: APARELHO, poster: proximoPoster() });
+      await db.adicionar({ nome, parceiros, musica, videoId: vid || null, status: "fila", ordem: Date.now(), criadoEm: Date.now(), aparelho: APARELHO, poster: proximoPoster() });
     } catch (e) {
       mensagem = { txt: "Não entrou na fila: " + (e.message || e) + ". Tente de novo.", tipo: "erro" };
       desenhar();
@@ -598,6 +698,48 @@
   function proximoPoster() {
     const ultimo = Object.values(dados).sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0))[0];
     return ultimo && ultimo.poster ? (ultimo.poster % N_POSTERS) + 1 : 1;
+  }
+
+  // ---------- reações ----------
+  function barraReacoes() {
+    return `<nav class="barra-reacoes" aria-label="Reações">
+      ${(CFG.reacoes || []).map((e) => `<button type="button" class="${e.length > 3 ? "texto" : ""}" data-acao="reagir" data-e="${esc(e)}" aria-label="Reagir ${esc(e)}">${esc(e)}</button>`).join("")}
+    </nav>`;
+  }
+
+  let ultimaReacao = 0;
+  function reagir(e) {
+    const agora = Date.now();
+    if (agora - ultimaReacao < 350) return; // segura quem aperta sem parar
+    ultimaReacao = agora;
+    soltar(e);
+    const { tocando } = listar();
+    db.reagir({ e, aparelho: APARELHO, nome: ls("karaoke.nome") || "", pedido: tocando ? tocando.id : null });
+  }
+
+  function soltar(e) {
+    if (ehPainel()) return; // o controlador não vê a chuva de emoji
+    const chuva = document.getElementById("chuva");
+    if (!chuva || chuva.childElementCount > 40) return;
+    const el = document.createElement("span");
+    el.textContent = e;
+    if (e.length > 3) el.className = "texto";
+    const grande = ehTelao() ? 1.8 : 1;
+    el.style.left = (4 + Math.random() * 84) + "%";
+    el.style.fontSize = Math.round((e.length > 3 ? 22 : 30 + Math.random() * 18) * grande) + "px";
+    el.style.setProperty("--deriva", Math.round((Math.random() - .5) * 120) + "px");
+    el.addEventListener("animationend", () => el.remove());
+    chuva.appendChild(el);
+  }
+
+  function avisarMudanca(proximo, vez) {
+    if (!aviso.primeiro && navigator.vibrate) {
+      try {
+        if (vez && !aviso.vez) navigator.vibrate([300, 120, 300, 120, 600]);
+        else if (proximo && !aviso.proximo) navigator.vibrate([200, 100, 200]);
+      } catch (e) {}
+    }
+    aviso = { proximo, vez, primeiro: false };
   }
 
   async function copiar(botao) {
@@ -647,8 +789,10 @@
       case "descer": return mover(id, +1);
       case "remover": confirmandoRemocao = id; return desenhar();
       case "remover-nao": confirmandoRemocao = null; return desenhar();
-      case "remover-sim": confirmandoRemocao = null; mensagem = { txt: "", tipo: "" }; return db.remover(id);
-      case "limpar-historico": { const { feitas } = listar(); for (const f of feitas) await db.remover(f.id); return; }
+      // Não apaga: marca, para a retrospectiva saber o que foi cancelado ou tirado.
+      case "remover-sim": confirmandoRemocao = null; mensagem = { txt: "", tipo: "" };
+        return db.atualizar(id, { status: ehPainel() ? "removida" : "cancelada", fim: Date.now() });
+      case "reagir": return reagir(b.dataset.e);
     }
   });
 
@@ -681,6 +825,7 @@
     try {
       db = CFG.FIREBASE ? await backendFirebase(CFG.FIREBASE) : backendLocal();
       db.assinar((d) => { dados = d || {}; desenhar(); });
+      db.ouvirReacoes((r) => { if (r && r.e && r.aparelho !== APARELHO) soltar(r.e); });
     } catch (err) { mostrarErroGeral(err); }
   })();
 })();

@@ -16,6 +16,9 @@ window.KARAOKE_CONFIG = {
   pinPainelHash: "f6bd5f7f2f69719e7ceb4e0967eff7042b01fcaeee573ce4a88bd06bcaf5364b",
   // Quantos pedidos cada celular pode ter esperando na fila ao mesmo tempo.
   limitePorPessoa: 3,
+  // Botões de reação na tela dos convidados (flutuam nos celulares e no telão).
+  // Textos com mais de 3 caracteres viram letreiro em vez de emoji.
+  reacoes: ["👏", "🔥", "😂", "😱", "🍻", "🍜", "🏮", "❤️", "KAMPAI!"],
 
   // Projeto "Karaoke Oba Aoba". Para o Realtime Database sem login basta o endereço.
   FIREBASE: {
