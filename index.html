@@ -611,14 +611,17 @@
   app.addEventListener("submit", (e) => {
     e.preventDefault();
     if (e.target.id === "form-pedido") return pedir(e.target);
-    if (e.target.id === "form-pin") {
-      if (document.getElementById("f-pin").value.trim().toLowerCase() === String(CFG.pinPainel).toLowerCase()) {
-        painelLiberado = true; ls("karaoke.painel", "ok"); desenhar();
-      } else {
-        document.getElementById("msg-pin").textContent = "Senha errada.";
-      }
-    }
+    if (e.target.id === "form-pin") conferirSenha(document.getElementById("f-pin").value);
   });
+
+  async function conferirSenha(digitada) {
+    const msg = document.getElementById("msg-pin");
+    if (!(window.crypto && crypto.subtle)) { msg.textContent = "Abra o painel pelo endereço https do site."; return; }
+    const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(digitada.trim().toLowerCase()));
+    const hash = [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    if (hash === CFG.pinPainelHash) { painelLiberado = true; ls("karaoke.painel", "ok"); desenhar(); }
+    else msg.textContent = "Senha errada.";
+  }
 
   window.addEventListener("hashchange", () => { confirmandoRemocao = null; mensagem = { txt: "", tipo: "" }; desenhar(); });
 

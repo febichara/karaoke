@@ -10,8 +10,10 @@ window.KARAOKE_CONFIG = {
   subtitulo: "SAN · SAN · SAN",
   data: "26.09.26",
   assinatura: "Bicharina 🎌 Kampai!",
-  // Senha simples para abrir o painel de quem comanda a máquina (#painel).
-  pinPainel: "bolinho",
+  // Senha do painel (#painel), guardada como SHA-256 do texto em minúsculas
+  // para não ficar legível no código público. Para trocar, gere o hash com:
+  //   python -c "import hashlib;print(hashlib.sha256(b'novasenha').hexdigest())"
+  pinPainelHash: "f6bd5f7f2f69719e7ceb4e0967eff7042b01fcaeee573ce4a88bd06bcaf5364b",
   // Quantos pedidos cada celular pode ter esperando na fila ao mesmo tempo.
   limitePorPessoa: 3,
 

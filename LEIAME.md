@@ -7,7 +7,7 @@ opcional) e quem comanda a máquina chama a próxima pelo painel.
 - **Convidados:** abrem o endereço do site ou o QR code que aparece no painel.
   Cada celular pode ter até 3 pedidos esperando (`limitePorPessoa` no `config.js`)
   e pode cancelar os próprios.
-- **Painel:** mesmo endereço com `#painel` no final, senha em `pinPainel`.
+- **Painel:** mesmo endereço com `#painel` no final, senha conferida contra `pinPainelHash`.
   "Chamar próxima" marca a atual como cantada e abre o vídeo no YouTube
   (ou uma busca "<música> karaoke", quando o pedido veio sem link).
   Dá para subir/descer, pôr para cantar agora ou tirar da fila.
@@ -26,9 +26,9 @@ opcional) e quem comanda a máquina chama a próxima pelo painel.
 
 ## Limites (é uma festa, não um banco)
 
-- A senha do painel só esconde a tela e fica visível no `config.js`, que é
-  público. As regras do Firebase deixam qualquer pessoa com o endereço escrever
-  na fila. Tudo bem para uma noite.
+- A senha do painel fica no `config.js` como hash SHA-256 (não aparece em
+  texto), mas ela só esconde a tela: as regras do Firebase deixam qualquer
+  pessoa com o endereço escrever na fila. Tudo bem para uma noite.
 - O "seu pedido" é reconhecido pelo navegador do celular. Se a pessoa trocar de
   navegador ou abrir em aba anônima, não consegue cancelar o pedido antigo; o
   painel consegue.
