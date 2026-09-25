@@ -18,7 +18,7 @@ window.KARAOKE_CONFIG = {
   limitePorPessoa: 3,
   // Botões de reação na tela dos convidados (flutuam nos celulares e no telão).
   // Textos com mais de 3 caracteres viram letreiro em vez de emoji.
-  reacoes: ["👏", "🔥", "😂", "😱", "🍻", "🍜", "🏮", "❤️", "KAMPAI!"],
+  reacoes: ["👏", "🔥", "😂", "😱", "🍻", "❤️", "KAMPAI!"],
 
   // Projeto "Karaoke Oba Aoba". Para o Realtime Database sem login basta o endereço.
   FIREBASE: {
