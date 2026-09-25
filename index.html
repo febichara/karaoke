@@ -207,7 +207,7 @@
   .qr-caixa { background: var(--asfalto); border: 2px solid var(--neon); box-shadow: var(--brilho); border-radius: 6px; padding: 18px; text-align: center; }
   .qr-caixa h2 { justify-content: center; }
   .qr-caixa #qr { background: var(--papel); padding: 12px; border-radius: 3px; display: inline-block; }
-  .qr-caixa #qr img, .qr-caixa #qr canvas { display: block; max-width: 100%; height: auto; }
+  .qr-caixa #qr img, .qr-caixa #qr canvas, .qr-caixa #qr svg { display: block; max-width: 100%; height: auto; }
   .qr-caixa p { margin: 10px 0 0; font-size: 14px; color: var(--papel-2); overflow-wrap: anywhere; }
   .controles { display: flex; gap: 10px; flex-wrap: wrap; }
   .controles .botao, .controles button { flex: 1 1 auto; }
@@ -525,12 +525,22 @@
     const el = document.getElementById("qr");
     if (!el) return;
     try {
-      if (!window.QRCode) {
-        qrCarregado = qrCarregado || carregarScript("https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js");
+      if (!window.QRCodeStyling) {
+        qrCarregado = qrCarregado || carregarScript("https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js");
         await qrCarregado;
       }
       el.innerHTML = "";
-      new QRCode(el, { text: url, width: 240, height: 240, colorDark: "#0c0909", colorLight: "#f3ebe3", correctLevel: QRCode.CorrectLevel.M });
+      // Pontos quadrados, só preto, com o contorno do lulu do lámen no meio.
+      // A correção de erro alta (H) é o que permite cobrir o centro com o desenho.
+      new QRCodeStyling({
+        width: 260, height: 260, type: "svg", data: url, margin: 0, image: "img/lulu-contorno.png",
+        qrOptions: { errorCorrectionLevel: "H" },
+        dotsOptions: { type: "square", color: "#0c0909" },
+        cornersSquareOptions: { type: "square", color: "#0c0909" },
+        cornersDotOptions: { type: "square", color: "#0c0909" },
+        backgroundOptions: { color: "#f3ebe3" },
+        imageOptions: { hideBackgroundDots: true, imageSize: 0.5, margin: 4 },
+      }).append(el);
     } catch (e) { el.textContent = "QR code indisponível"; }
   }
 
