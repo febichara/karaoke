@@ -211,6 +211,15 @@
   .qr-caixa p { margin: 10px 0 0; font-size: 14px; color: var(--papel-2); overflow-wrap: anywhere; }
   .controles { display: flex; gap: 10px; flex-wrap: wrap; }
   .controles .botao, .controles button { flex: 1 1 auto; }
+  /* Chave liga/desliga */
+  .chave { flex-direction: row; align-items: center; gap: 12px; cursor: pointer; font-size: 14px; color: var(--papel); letter-spacing: 0; }
+  .chave small { color: var(--papel-2); }
+  .chave input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .chave .trilho { flex: none; width: 42px; height: 24px; border-radius: 12px; background: var(--linha); position: relative; transition: background .2s, box-shadow .2s; }
+  .chave .trilho::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--papel-2); transition: transform .2s, background .2s; }
+  .chave input:checked + .trilho { background: var(--neon); box-shadow: 0 0 12px rgba(255, 45, 45, .5); }
+  .chave input:checked + .trilho::after { transform: translateX(18px); background: #fff; }
+  .chave input:focus-visible + .trilho { outline: 2px solid var(--papel); outline-offset: 2px; }
   .barra-painel { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--papel-2); font-size: 14px; }
   details.historico summary { cursor: pointer; color: var(--papel-2); }
   details.historico ol { color: var(--papel-2); font-size: 14px; padding-left: 1.4em; }
@@ -320,6 +329,8 @@
   let painelLiberado = ls("karaoke.painel") === "ok";
   let confirmandoRemocao = null;
   let mensagem = { txt: "", tipo: "" };
+  // Preferência só deste aparelho (o notebook do painel): abrir o YouTube ao chamar a próxima.
+  let abrirYoutube = ls("karaoke.abrirYoutube") !== "nao";
 
   function listar() {
     const todos = Object.entries(dados).map(([id, v]) => ({ id, ...v }));
@@ -355,6 +366,8 @@
         <div class="cantor">no microfone: <b>${esc(tocando.nome)}</b></div>
         ${comControles ? `<div class="controles" style="margin-top:14px">
             <a class="botao claro" href="${esc(linkTocar(tocando))}" target="_blank" rel="noopener">▶ Abrir no YouTube</a>
+            ${tocando.videoId ? `<button class="leve" data-acao="copiar" data-texto="${esc(linkTocar(tocando))}">Copiar link</button>` : ""}
+            <button class="leve" data-acao="copiar" data-texto="${esc(tocando.musica + " karaoke")}">Copiar “${esc(tocando.musica)} karaoke”</button>
           </div>` : ""}
       </div>
     </section>`;
@@ -502,6 +515,11 @@
             <button data-acao="proxima" ${fila.length ? "" : "disabled"}>⏭ Chamar próxima${fila[0] ? `: ${esc(fila[0].nome)}` : ""}</button>
             ${tocando ? `<button class="leve" data-acao="encerrar">Terminar sem chamar outra</button>` : ""}
           </div>
+          <label class="chave">
+            <input type="checkbox" id="f-abrir-youtube" ${abrirYoutube ? "checked" : ""}>
+            <span class="trilho" aria-hidden="true"></span>
+            <span>Abrir o YouTube numa aba nova ao chamar a próxima <small>(${abrirYoutube ? "ligado" : "desligado: só marca na fila; use os botões de copiar"})</small></span>
+          </label>
           ${blocoFila(fila, true)}
           <details class="historico">
             <summary>Já cantadas (${feitas.length})</summary>
@@ -582,13 +600,28 @@
     return ultimo && ultimo.poster ? (ultimo.poster % N_POSTERS) + 1 : 1;
   }
 
+  async function copiar(botao) {
+    const texto = botao.dataset.texto;
+    const rotulo = botao.textContent;
+    try {
+      await navigator.clipboard.writeText(texto);
+    } catch (e) {
+      // Plano B para navegadores que recusam a área de transferência.
+      const t = document.createElement("textarea");
+      t.value = texto; t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove();
+    }
+    botao.textContent = "Copiado ✓";
+    setTimeout(() => { if (botao.isConnected) botao.textContent = rotulo; }, 1500);
+  }
+
   async function chamarProxima(id) {
     const { fila, tocando } = listar();
     const alvo = id ? fila.find((x) => x.id === id) : fila[0];
     if (tocando) await db.atualizar(tocando.id, { status: "feita", fim: Date.now() });
     if (alvo) {
       await db.atualizar(alvo.id, { status: "tocando", inicio: Date.now() });
-      window.open(linkTocar(alvo), "karaoke-youtube", "noopener");
+      if (abrirYoutube) window.open(linkTocar(alvo), "karaoke-youtube", "noopener");
     }
   }
 
@@ -607,6 +640,7 @@
     const id = b.dataset.id;
     switch (b.dataset.acao) {
       case "proxima": return chamarProxima();
+      case "copiar": return copiar(b);
       case "agora": return chamarProxima(id);
       case "encerrar": { const { tocando } = listar(); if (tocando) await db.atualizar(tocando.id, { status: "feita", fim: Date.now() }); return; }
       case "subir": return mover(id, -1);
@@ -632,6 +666,13 @@
     if (hash === CFG.pinPainelHash) { painelLiberado = true; ls("karaoke.painel", "ok"); desenhar(); }
     else msg.textContent = "Senha errada.";
   }
+
+  app.addEventListener("change", (e) => {
+    if (e.target.id !== "f-abrir-youtube") return;
+    abrirYoutube = e.target.checked;
+    ls("karaoke.abrirYoutube", abrirYoutube ? "sim" : "nao");
+    desenhar();
+  });
 
   window.addEventListener("hashchange", () => { confirmandoRemocao = null; mensagem = { txt: "", tipo: "" }; desenhar(); });
 
