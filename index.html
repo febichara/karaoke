@@ -490,7 +490,7 @@
   function telaPainel() {
     if (!painelLiberado) return telaPin();
     const { fila, tocando, feitas } = listar();
-    const urlConvidado = location.href.split("#")[0];
+    const urlConvidado = location.origin + location.pathname;
     app.innerHTML = `
       ${blocoPlaca("")}
       <div class="barra-painel"><span>Painel de quem comanda a máquina</span><a href="#" class="botao leve">Ver como convidado</a></div>
