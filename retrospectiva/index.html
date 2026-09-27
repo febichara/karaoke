@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0909">
+<title>OBA: AOBA · Retrospectiva</title>
+<meta name="description" content="A noite do karaokê do OBA: AOBA (San-San-San) em números.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --noite: #0c0909;
+    --asfalto: #161112;
+    --linha: #3a2627;
+    --papel: #f3ebe3;
+    --papel-2: #b8a7a2;
+    --apagado: #6e5d5a;
+    --neon: #ff2d2d;
+    --neon-claro: #ff8a7a;
+    --brilho: 0 0 4px rgba(255, 60, 50, .9), 0 0 14px rgba(255, 45, 45, .6), 0 0 36px rgba(255, 30, 30, .35);
+    --display: "Antonio", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+    --corpo: "Noto Sans JP", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--noite); color: var(--papel); font: 16px/1.5 var(--corpo); padding-inline: 16px; padding-block: 0 48px; }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(900px 520px at 50% 0%, rgba(255, 40, 40, .10), transparent 70%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,.014) 0 1px, transparent 1px 11px), var(--noite); }
+  .wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+
+  /* Placa */
+  .placa { position: relative; margin-inline: -16px; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 68% 16px 0; overflow: hidden; }
+  .placa::before { content: ""; position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 1;
+    background: linear-gradient(180deg, rgba(12,9,9,.3) 0%, rgba(12,9,9,0) 22%, rgba(12,9,9,0) 52%, rgba(12,9,9,.85) 78%, var(--noite) 96%),
+      url("../img/beco-800.webp") center / cover no-repeat, #1d1213; }
+  @media (min-width: 700px) { .placa { margin-inline: 0; padding-top: 64%; } .placa::before { background-image: linear-gradient(180deg, rgba(12,9,9,.3) 0%, rgba(12,9,9,0) 22%, rgba(12,9,9,0) 52%, rgba(12,9,9,.85) 78%, var(--noite) 96%), url("../img/beco.webp"); } }
+  .placa > * { position: relative; }
+  .vertical { position: absolute; top: 20px; right: 18px; writing-mode: vertical-rl; font-weight: 700; font-size: 15px; letter-spacing: .3em; color: #ffd9d2; text-shadow: var(--brilho); }
+  .eyebrow { font-weight: 700; font-size: 13px; letter-spacing: .3em; color: var(--neon-claro); text-shadow: var(--brilho); margin: 0; padding-left: .3em; }
+  h1 { font-family: var(--display); font-weight: 700; margin: 4px 0 0; font-size: clamp(64px, 18vw, 120px); line-height: .92; text-transform: uppercase; text-shadow: 0 2px 28px rgba(0,0,0,.7); }
+  .san { font-weight: 500; font-size: 15px; letter-spacing: .34em; margin: 10px 0 0; padding-left: .34em; }
+  .data { font-family: var(--display); font-size: 22px; letter-spacing: .08em; color: var(--papel-2); margin: 6px 0 0; }
+
+  h2 { font-family: var(--display); font-weight: 600; font-size: 30px; letter-spacing: .05em; text-transform: uppercase; margin: 0 0 6px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; text-wrap: balance; }
+  h2 .jp { font-family: var(--corpo); font-size: 12px; font-weight: 500; letter-spacing: .2em; color: var(--neon-claro); text-transform: none; }
+  .nota { color: var(--papel-2); font-size: 14px; margin: 0 0 16px; max-width: 60ch; }
+  section { display: flex; flex-direction: column; }
+
+  /* Números */
+  .numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .num { background: var(--asfalto); border: 1px solid var(--linha); border-radius: 4px; padding: 16px 12px; text-align: center; }
+  .num b { display: block; font-family: var(--display); font-weight: 700; font-size: clamp(40px, 10vw, 58px); line-height: 1; font-variant-numeric: tabular-nums; }
+  .num span { display: block; color: var(--papel-2); font-size: 13px; margin-top: 6px; }
+  .num.aceso { border: 2px solid var(--neon); box-shadow: var(--brilho); }
+  @media (max-width: 480px) { .numeros { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Barras (série única, vermelho neon; o número fica sempre visível) */
+  .barras { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .barras li { display: grid; grid-template-columns: minmax(7em, 34%) 1fr; gap: 12px; align-items: center; }
+  .barras .rot { font-weight: 500; text-align: right; overflow-wrap: anywhere; line-height: 1.2; }
+  .barras .rot small { display: block; color: var(--papel-2); font-weight: 400; font-size: 12px; }
+  .barras .trilha { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .barras .barra { height: 18px; background: var(--neon); border-radius: 0 4px 4px 0; min-width: 4px; }
+  .barras li:first-child .barra { box-shadow: var(--brilho); }
+  .barras .val { font-family: var(--display); font-weight: 600; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .barras li:hover .barra { filter: brightness(1.2); }
+
+  /* Colunas por hora */
+  .horas { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; align-items: end; height: 200px; border-bottom: 1px solid var(--linha); padding-top: 24px; }
+  .horas .col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
+  .horas .col .val { font-family: var(--display); font-weight: 600; font-size: 18px; font-variant-numeric: tabular-nums; }
+  .horas .col .barra { width: 100%; max-width: 44px; background: var(--neon); border-radius: 4px 4px 0 0; }
+  .horas .col.pico .barra { box-shadow: var(--brilho); }
+  .eixo { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; text-align: center; color: var(--papel-2); font-size: 13px; padding-top: 6px; font-variant-numeric: tabular-nums; }
+
+  /* Destaques */
+  .destaques { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card { background: var(--asfalto); border: 1px solid var(--linha); border-radius: 6px; padding: 16px; display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; }
+  .card img { width: 64px; aspect-ratio: 240 / 339; object-fit: cover; border-radius: 2px; }
+  .card .rotulo { font-weight: 700; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--neon-claro); }
+  .card .titulo { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.05; text-transform: uppercase; margin: 4px 0 2px; overflow-wrap: anywhere; }
+  .card .quem { color: var(--papel-2); font-size: 14px; }
+  .card .quem b { color: var(--papel); font-weight: 500; }
+  .card.aceso { border: 2px solid var(--neon); box-shadow: var(--brilho); }
+  .card.largo { grid-column: 1 / -1; }
+  .card .grande { font-family: var(--display); font-weight: 700; font-size: 44px; line-height: 1; text-align: center; color: #fff; text-shadow: var(--brilho); }
+  @media (max-width: 560px) { .destaques { grid-template-columns: 1fr; } }
+
+  .emojis { display: flex; flex-wrap: wrap; gap: 8px; }
+  .emojis span { background: var(--asfalto); border: 1px solid var(--linha); border-radius: 3px; padding: 6px 10px; font-size: 20px; display: inline-flex; align-items: center; gap: 8px; }
+  .emojis span b { font-family: var(--display); font-size: 20px; font-weight: 600; }
+  .emojis span.texto { font: 700 15px var(--display); letter-spacing: .06em; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips span { border: 1px dashed var(--linha); border-radius: 3px; padding: 5px 10px; font-size: 14px; color: var(--papel-2); }
+  .chips span b { color: var(--papel); font-weight: 500; }
+
+  /* Setlist */
+  ol.setlist { list-style: none; margin: 0; padding: 0; }
+  ol.setlist li { display: grid; grid-template-columns: 2.2em 3.2em 40px 1fr; gap: 10px; align-items: center; padding: 8px 2px; border-bottom: 1px solid var(--linha); }
+  ol.setlist li:first-child { border-top: 1px solid var(--linha); }
+  ol.setlist .n { font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--apagado); text-align: right; font-variant-numeric: tabular-nums; }
+  ol.setlist .h { color: var(--papel-2); font-size: 13px; font-variant-numeric: tabular-nums; }
+  ol.setlist img { width: 40px; aspect-ratio: 240 / 339; object-fit: cover; border-radius: 2px; display: block; }
+  ol.setlist .m { font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+  ol.setlist .m small { font-weight: 400; color: var(--papel-2); }
+  ol.setlist .c { color: var(--papel-2); font-size: 14px; }
+  ol.setlist .c b { color: var(--papel); font-weight: 500; }
+  @media (max-width: 480px) { ol.setlist li { grid-template-columns: 2em 40px 1fr; } ol.setlist .h { display: none; } }
+
+  footer { text-align: center; color: var(--papel-2); font-size: 14px; display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid var(--linha); }
+  footer .numeros-festa { font-family: var(--display); font-size: 34px; letter-spacing: .08em; color: var(--papel); }
+  footer a { color: var(--neon-claro); }
+  .losango { display: inline-block; width: 1.1em; aspect-ratio: 478 / 400; vertical-align: -.15em; background: var(--neon);
+    -webkit-mask: url("../img/losango.png") center / contain no-repeat; mask: url("../img/losango.png") center / contain no-repeat;
+    filter: drop-shadow(0 0 3px rgba(255, 60, 50, .9)) drop-shadow(0 0 10px rgba(255, 45, 45, .6)); }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><p>Carregando…</p></div>
+<script src="dados.js"></script>
+<script>
+(function () {
+  "use strict";
+  const D = window.RETRO;
+  const app = document.getElementById("app");
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const nomes = (q) => q.length < 2 ? (q[0] || "") : q.slice(0, -1).join(", ") + " & " + q[q.length - 1];
+  const poster = (n) => `../img/posters/p${n || 1}.webp`;
+  const N = D.numeros;
+
+  function barras(itens, unidade) {
+    const max = Math.max(...itens.map((x) => x[1]));
+    return `<ol class="barras">${itens.map(([rot, v, sub]) => `
+      <li title="${esc(rot)}: ${v} ${unidade}">
+        <span class="rot">${esc(rot)}${sub ? `<small>${esc(sub)}</small>` : ""}</span>
+        <span class="trilha"><span class="barra" style="width:${(v / max) * 100}%"></span><span class="val">${v}</span></span>
+      </li>`).join("")}</ol>`;
+  }
+
+  function card(rotulo, s, extra, aceso) {
+    return `<div class="card ${aceso ? "aceso" : ""}">
+      <img src="${poster(s.poster)}" alt="">
+      <div><div class="rotulo">${rotulo}</div>
+        <div class="titulo">${esc(s.titulo)}</div>
+        <div class="quem">${s.artista ? esc(s.artista) + " · " : ""}<b>${esc(nomes(s.quem))}</b>${extra ? ` · ${extra}` : ""}</div></div>
+    </div>`;
+  }
+
+  // Bis: música cantada mais de uma vez
+  const vezes = {};
+  D.setlist.forEach((s) => { (vezes[s.titulo] = vezes[s.titulo] || []).push(s); });
+  const bis = Object.values(vezes).find((v) => v.length > 1);
+
+  const maxHora = Math.max(...D.porHora.map((h) => h[1]));
+  const empateArtista = D.artistas.filter((a) => a[1] === D.artistas[0][1]).map((a) => a[0]);
+  const reagida = D.maisReagida && D.setlist.find((s) => s.titulo === D.maisReagida.titulo);
+
+  app.innerHTML = `
+    <header class="placa">
+      <span class="vertical" aria-hidden="true">カラオケ</span>
+      <p class="eyebrow">RETROSPECTIVA</p>
+      <h1>OBA: AOBA</h1>
+      <p class="san">SAN · SAN · SAN</p>
+      <p class="data">26.09.26 · 19h28 → 02h55</p>
+    </header>
+
+    <section>
+      <h2>A noite em números <span class="jp">数字</span></h2>
+      <div class="numeros">
+        <div class="num aceso"><b>${N.cantadas}</b><span>músicas cantadas</span></div>
+        <div class="num"><b>${String(N.horasMicrofone).replace(".", ",")} h</b><span>de microfone ligado</span></div>
+        <div class="num"><b>${N.cantores}</b><span>pessoas no microfone</span></div>
+        <div class="num"><b>${N.pedidos}</b><span>pedidos na fila</span></div>
+        <div class="num"><b>${N.emGrupo}</b><span>em dupla ou trio</span></div>
+        <div class="num"><b>${N.celulares}</b><span>celulares pedindo música</span></div>
+      </div>
+      <p class="nota" style="margin-top:12px">Só ${N.solo} músicas foram solo. Cada uma durou em média ${String(N.mediaMin).replace(".", ",")} minutos, e ${N.naFila} ficaram na fila quando o microfone desligou.</p>
+    </section>
+
+    <section>
+      <h2>Quem mais cantou <span class="jp">歌った人</span></h2>
+      <p class="nota">Vezes no microfone, contando duetos e trios.</p>
+      ${barras(D.quemMaisCantou, "músicas")}
+    </section>
+
+    <section>
+      <h2>Duplas inseparáveis <span class="jp">コンビ</span></h2>
+      <p class="nota">Quem mais dividiu o microfone.</p>
+      ${barras(D.duplas.map(([p, v]) => [p.join(" & "), v]), "músicas juntos")}
+    </section>
+
+    <section>
+      <h2>Quem mais pediu <span class="jp">リクエスト</span></h2>
+      <p class="nota">Pedidos feitos pelo celular, cantados ou não.</p>
+      ${barras(D.quemMaisPediu, "pedidos")}
+    </section>
+
+    <section>
+      <h2>Artistas da noite <span class="jp">アーティスト</span></h2>
+      <p class="nota">${empateArtista.length > 1 ? `Empate no topo: <b>${empateArtista.map(esc).join("</b> e <b>")}</b>, com ${D.artistas[0][1]} músicas cada.` : ""}</p>
+      ${barras(D.artistas, "músicas")}
+    </section>
+
+    <section>
+      <h2>O que se cantou <span class="jp">ジャンル</span></h2>
+      <p class="nota">As ${N.cantadas} músicas por estilo.</p>
+      ${barras(D.categorias, "músicas")}
+    </section>
+
+    <section>
+      <h2>O ritmo da noite <span class="jp">時間</span></h2>
+      <p class="nota">Músicas cantadas por hora. O pico de pedidos foi entre ${D.picoPedidos[0]}h e ${D.picoPedidos[0] + 1}h: ${D.picoPedidos[1]} pedidos numa hora só.</p>
+      <div class="horas" role="img" aria-label="Músicas por hora: ${D.porHora.map(([h, v]) => `${h}h ${v}`).join(", ")}">
+        ${D.porHora.map(([h, v]) => `<div class="col ${v === maxHora ? "pico" : ""}" title="${h}h: ${v} músicas"><span class="val">${v}</span><span class="barra" style="height:${(v / maxHora) * 80}%"></span></div>`).join("")}
+      </div>
+      <div class="eixo">${D.porHora.map(([h]) => `<span>${h}h</span>`).join("")}</div>
+    </section>
+
+    <section>
+      <h2>Destaques <span class="jp">ハイライト</span></h2>
+      <div class="destaques">
+        ${card("Abriu a noite", D.abriu, D.abriu.hora)}
+        ${card("Fechou a noite", D.fechou, D.fechou.hora)}
+        ${reagida ? card("Performance mais reagida", reagida, `${D.maisReagida.n} reações, ${D.maisReagida.kampai} KAMPAI!`, true) : ""}
+        ${bis ? card("Pediu bis", bis[0], `${bis.length} vezes (${bis.map((s) => s.hora).join(" e ")})`) : ""}
+        <div class="card largo">
+          <div class="grande">KAMPAI!</div>
+          <div><div class="rotulo">Reação favorita</div>
+            <div class="quem" style="margin-top:6px">Foram ${N.reacoes} reações pelos celulares, e o KAMPAI! ganhou.</div>
+            <div class="emojis" style="margin-top:10px">${D.emojis.map(([e, v]) => `<span class="${e.length > 3 ? "texto" : ""}">${esc(e)} <b>${v}</b></span>`).join("")}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Ficou pra próxima <span class="jp">また今度</span></h2>
+      <p class="nota">${D.ficouPraProxima.length} músicas ainda estavam na fila quando a noite acabou.</p>
+      <div class="chips">${D.ficouPraProxima.map((f) => `<span>${esc(f.titulo)} · <b>${esc(nomes(f.quem))}</b></span>`).join("")}</div>
+    </section>
+
+    <section>
+      <h2>O setlist completo <span class="jp">セットリスト</span></h2>
+      <p class="nota">As ${N.cantadas} músicas, na ordem em que foram cantadas.</p>
+      <ol class="setlist">${D.setlist.map((s) => `
+        <li><span class="n">${s.n}</span><span class="h">${s.hora}</span><img src="${poster(s.poster)}" alt="" loading="lazy">
+          <div><div class="m">${esc(s.titulo)}${s.artista ? ` <small>· ${esc(s.artista)}</small>` : ""}</div>
+          <div class="c"><b>${esc(nomes(s.quem))}</b></div></div></li>`).join("")}
+      </ol>
+    </section>
+
+    <footer>
+      <span class="numeros-festa"><span class="losango" aria-hidden="true"></span> 33 · 30 · 3 <span class="losango" aria-hidden="true"></span></span>
+      <p>Obrigado por passarem vergonha com a gente.</p>
+      <p>Bicharina 🎌 Kampai!</p>
+    </footer>`;
+})();
+</script>
+</body>
+</html>
