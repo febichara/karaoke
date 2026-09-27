@@ -1,15 +1,15 @@
 // Gerado por _backup/montar_retro.py a partir do backup pós-festa (27.09.26).
 window.RETRO = {
  "numeros": {
-  "cantadas": 83,
-  "pedidos": 112,
-  "celulares": 35,
-  "cantores": 40,
-  "horasMicrofone": 5.9,
-  "mediaMin": 4.4,
+  "cantadas": 82,
+  "pedidos": 111,
+  "celulares": 34,
+  "cantores": 39,
+  "horasMicrofone": 5.8,
+  "mediaMin": 4.3,
   "emGrupo": 54,
   "trios": 5,
-  "solo": 29,
+  "solo": 28,
   "canceladas": 12,
   "removidas": 4,
   "naFila": 13,
@@ -127,10 +127,6 @@ window.RETRO = {
    4
   ],
   [
-   "Jorge & Mateus",
-   3
-  ],
-  [
    "Marília Mendonça",
    3
   ],
@@ -149,6 +145,10 @@ window.RETRO = {
   [
    "Skank",
    2
+  ],
+  [
+   "Jorge & Mateus",
+   2
   ]
  ],
  "categorias": [
@@ -161,15 +161,15 @@ window.RETRO = {
    16
   ],
   [
-   "Sertanejo & sofrência",
-   11
-  ],
-  [
    "Rock",
    11
   ],
   [
    "Pop & MPB nacional",
+   10
+  ],
+  [
+   "Sertanejo & sofrência",
    10
   ],
   [
@@ -188,7 +188,7 @@ window.RETRO = {
  "porHora": [
   [
    19,
-   2
+   1
   ],
   [
    20,
@@ -265,18 +265,18 @@ window.RETRO = {
  },
  "abriu": {
   "n": 1,
-  "hora": "19:28",
-  "titulo": "Prisão Sem Grade",
-  "artista": "Jorge & Mateus",
-  "cat": "Sertanejo & sofrência",
+  "hora": "19:45",
+  "titulo": "Valerie",
+  "artista": "Amy Winehouse",
+  "cat": "Pop internacional",
   "quem": [
-   "Bichara"
+   "Bárbara"
   ],
-  "poster": 3,
-  "id": "-P2UpDu-OrE2VOk132GP"
+  "poster": 4,
+  "id": "-P2UsoDr-wsDs3f6B-h-"
  },
  "fechou": {
-  "n": 83,
+  "n": 82,
   "hora": "02:55",
   "titulo": "¿Velaske, yo soy guapa?",
   "artista": "Las Meninas",
@@ -290,7 +290,7 @@ window.RETRO = {
  },
  "repetidas": [
   {
-   "n": 2,
+   "n": 1,
    "hora": "19:45",
    "titulo": "Valerie",
    "artista": "Amy Winehouse",
@@ -398,17 +398,6 @@ window.RETRO = {
  "setlist": [
   {
    "n": 1,
-   "hora": "19:28",
-   "titulo": "Prisão Sem Grade",
-   "artista": "Jorge & Mateus",
-   "cat": "Sertanejo & sofrência",
-   "quem": [
-    "Bichara"
-   ],
-   "poster": 3
-  },
-  {
-   "n": 2,
    "hora": "19:45",
    "titulo": "Valerie",
    "artista": "Amy Winehouse",
@@ -419,7 +408,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 3,
+   "n": 2,
    "hora": "20:37",
    "titulo": "Desperdiçou",
    "artista": "Sandy & Junior",
@@ -431,7 +420,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 4,
+   "n": 3,
    "hora": "20:41",
    "titulo": "Eu Nasci Há Dez Mil Anos Atrás",
    "artista": "Raul Seixas",
@@ -442,7 +431,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 5,
+   "n": 4,
    "hora": "20:46",
    "titulo": "Right Now (Na Na Na)",
    "artista": "Akon",
@@ -453,7 +442,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 6,
+   "n": 5,
    "hora": "20:51",
    "titulo": "Maluco Beleza",
    "artista": "Raul Seixas",
@@ -465,7 +454,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 7,
+   "n": 6,
    "hora": "20:54",
    "titulo": "Não Quero Dinheiro",
    "artista": "Tim Maia",
@@ -476,7 +465,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 8,
+   "n": 7,
    "hora": "20:57",
    "titulo": "O Show Tem Que Continuar",
    "artista": "Fundo de Quintal",
@@ -488,7 +477,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 9,
+   "n": 8,
    "hora": "21:00",
    "titulo": "Turn It Off",
    "artista": "The Book of Mormon",
@@ -499,7 +488,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 10,
+   "n": 9,
    "hora": "21:13",
    "titulo": "I'm Like a Bird",
    "artista": "Nelly Furtado",
@@ -510,7 +499,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 11,
+   "n": 10,
    "hora": "21:17",
    "titulo": "Estoy Aquí",
    "artista": "Shakira",
@@ -521,7 +510,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 12,
+   "n": 11,
    "hora": "21:21",
    "titulo": "I Don't Want to Miss a Thing",
    "artista": "Aerosmith",
@@ -532,7 +521,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 13,
+   "n": 12,
    "hora": "21:27",
    "titulo": "Sorriso Resplandecente",
    "artista": "Dragon Ball GT",
@@ -543,7 +532,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 14,
+   "n": 13,
    "hora": "21:31",
    "titulo": "The Climb",
    "artista": "Miley Cyrus",
@@ -555,7 +544,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 15,
+   "n": 14,
    "hora": "21:35",
    "titulo": "Meu Cenário",
    "artista": "Flávio José",
@@ -566,7 +555,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 16,
+   "n": 15,
    "hora": "21:44",
    "titulo": "Jackie Tequila",
    "artista": "Skank",
@@ -578,7 +567,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 17,
+   "n": 16,
    "hora": "21:48",
    "titulo": "Golden",
    "artista": "KPop Demon Hunters",
@@ -590,7 +579,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 18,
+   "n": 17,
    "hora": "21:52",
    "titulo": "Maneiras",
    "artista": "Zeca Pagodinho",
@@ -601,7 +590,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 19,
+   "n": 18,
    "hora": "21:56",
    "titulo": "Look at Me Now",
    "artista": "Chris Brown",
@@ -612,7 +601,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 20,
+   "n": 19,
    "hora": "22:00",
    "titulo": "The Pretender",
    "artista": "Foo Fighters",
@@ -624,7 +613,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 21,
+   "n": 20,
    "hora": "22:04",
    "titulo": "Suffering",
    "artista": "EPIC: The Musical",
@@ -636,7 +625,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 22,
+   "n": 21,
    "hora": "22:09",
    "titulo": "Saudade Louca",
    "artista": "Arlindo Cruz",
@@ -647,7 +636,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 23,
+   "n": 22,
    "hora": "22:13",
    "titulo": "Do You Want to Build a Snowman?",
    "artista": "Frozen",
@@ -658,7 +647,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 24,
+   "n": 23,
    "hora": "22:17",
    "titulo": "Sinais de Fogo",
    "artista": "Preta Gil",
@@ -669,7 +658,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 25,
+   "n": 24,
    "hora": "22:22",
    "titulo": "The Other Side",
    "artista": "The Greatest Showman",
@@ -681,7 +670,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 26,
+   "n": 25,
    "hora": "22:26",
    "titulo": "Seu Astral",
    "artista": "Jorge & Mateus",
@@ -693,7 +682,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 27,
+   "n": 26,
    "hora": "22:29",
    "titulo": "Espumas ao Vento",
    "artista": "Fagner",
@@ -705,7 +694,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 28,
+   "n": 27,
    "hora": "22:34",
    "titulo": "Valerie",
    "artista": "Amy Winehouse",
@@ -716,7 +705,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 29,
+   "n": 28,
    "hora": "22:38",
    "titulo": "Ela É Demais",
    "artista": "Rick & Renner",
@@ -728,7 +717,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 30,
+   "n": 29,
    "hora": "22:42",
    "titulo": "Você Me Vira a Cabeça",
    "artista": "Alcione",
@@ -740,7 +729,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 31,
+   "n": 30,
    "hora": "22:47",
    "titulo": "Warrior of the Mind",
    "artista": "EPIC: The Musical",
@@ -752,7 +741,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 32,
+   "n": 31,
    "hora": "22:53",
    "titulo": "Wouldn't You Like",
    "artista": "EPIC: The Musical",
@@ -764,7 +753,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 33,
+   "n": 32,
    "hora": "22:57",
    "titulo": "Whenever, Wherever",
    "artista": "Shakira",
@@ -775,7 +764,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 34,
+   "n": 33,
    "hora": "23:01",
    "titulo": "Temporal",
    "artista": "Art Popular",
@@ -786,7 +775,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 35,
+   "n": 34,
    "hora": "23:06",
    "titulo": "Loba",
    "artista": "Alcione",
@@ -798,7 +787,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 36,
+   "n": 35,
    "hora": "23:11",
    "titulo": "Dákiti",
    "artista": "Bad Bunny",
@@ -809,7 +798,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 37,
+   "n": 36,
    "hora": "23:15",
    "titulo": "You'll Be Back",
    "artista": "Hamilton",
@@ -822,7 +811,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 38,
+   "n": 37,
    "hora": "23:19",
    "titulo": "I Want It That Way",
    "artista": "Backstreet Boys",
@@ -835,7 +824,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 39,
+   "n": 38,
    "hora": "23:23",
    "titulo": "It's My Life",
    "artista": "Bon Jovi",
@@ -846,7 +835,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 40,
+   "n": 39,
    "hora": "23:27",
    "titulo": "Reinventar",
    "artista": "Belo",
@@ -857,7 +846,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 41,
+   "n": 40,
    "hora": "23:32",
    "titulo": "Love in Paradise",
    "artista": "EPIC: The Musical",
@@ -869,7 +858,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 42,
+   "n": 41,
    "hora": "23:36",
    "titulo": "SOS",
    "artista": "ABBA",
@@ -881,7 +870,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 43,
+   "n": 42,
    "hora": "23:40",
    "titulo": "Anos 70",
    "artista": "MC Poze do Rodo",
@@ -892,7 +881,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 44,
+   "n": 43,
    "hora": "23:43",
    "titulo": "Nocaute",
    "artista": "Jorge & Mateus",
@@ -903,7 +892,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 45,
+   "n": 44,
    "hora": "23:46",
    "titulo": "In the End",
    "artista": "Linkin Park",
@@ -915,7 +904,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 46,
+   "n": 45,
    "hora": "23:50",
    "titulo": "Como Faz com Ela",
    "artista": "Marília Mendonça",
@@ -927,7 +916,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 47,
+   "n": 46,
    "hora": "23:53",
    "titulo": "Don't Look Back in Anger",
    "artista": "Oasis",
@@ -939,7 +928,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 48,
+   "n": 47,
    "hora": "23:59",
    "titulo": "A Lenda",
    "artista": "Sandy & Junior",
@@ -951,7 +940,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 49,
+   "n": 48,
    "hora": "00:04",
    "titulo": "Too Little Too Late",
    "artista": "JoJo",
@@ -963,7 +952,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 50,
+   "n": 49,
    "hora": "00:09",
    "titulo": "One Less Lonely Girl",
    "artista": "Justin Bieber",
@@ -975,7 +964,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 51,
+   "n": 50,
    "hora": "00:13",
    "titulo": "Aún Hay Algo",
    "artista": "RBD",
@@ -987,7 +976,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 52,
+   "n": 51,
    "hora": "00:17",
    "titulo": "Iris",
    "artista": "Goo Goo Dolls",
@@ -999,7 +988,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 53,
+   "n": 52,
    "hora": "00:21",
    "titulo": "A Whole New World",
    "artista": "Aladdin",
@@ -1011,7 +1000,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 54,
+   "n": 53,
    "hora": "00:25",
    "titulo": "Satisfied",
    "artista": "Hamilton",
@@ -1024,7 +1013,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 55,
+   "n": 54,
    "hora": "00:32",
    "titulo": "I'll Make a Man Out of You",
    "artista": "Mulan",
@@ -1036,7 +1025,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 56,
+   "n": 55,
    "hora": "00:36",
    "titulo": "Can You Feel the Love Tonight",
    "artista": "O Rei Leão",
@@ -1048,7 +1037,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 57,
+   "n": 56,
    "hora": "00:40",
    "titulo": "Infiel",
    "artista": "Marília Mendonça",
@@ -1060,7 +1049,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 58,
+   "n": 57,
    "hora": "00:44",
    "titulo": "Vamo Pular",
    "artista": "Sandy & Junior",
@@ -1072,7 +1061,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 59,
+   "n": 58,
    "hora": "00:48",
    "titulo": "Only Girl (In the World)",
    "artista": "Rihanna",
@@ -1083,7 +1072,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 60,
+   "n": 59,
    "hora": "00:53",
    "titulo": "Não Aprendi Dizer Adeus",
    "artista": "Leandro & Leonardo",
@@ -1095,7 +1084,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 61,
+   "n": 60,
    "hora": "00:57",
    "titulo": "Fada",
    "artista": "Victor & Leo",
@@ -1107,7 +1096,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 62,
+   "n": 61,
    "hora": "01:01",
    "titulo": "Dormi na Praça",
    "artista": "Bruno & Marrone",
@@ -1119,7 +1108,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 63,
+   "n": 62,
    "hora": "01:04",
    "titulo": "Complicated",
    "artista": "Avril Lavigne",
@@ -1131,7 +1120,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 64,
+   "n": 63,
    "hora": "01:09",
    "titulo": "The Fate of Ophelia",
    "artista": "Taylor Swift",
@@ -1144,7 +1133,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 65,
+   "n": 64,
    "hora": "01:13",
    "titulo": "Saideira",
    "artista": "Skank",
@@ -1156,7 +1145,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 66,
+   "n": 65,
    "hora": "01:18",
    "titulo": "Abracadabra",
    "artista": "Lady Gaga",
@@ -1168,7 +1157,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 67,
+   "n": 66,
    "hora": "01:22",
    "titulo": "Rumour Has It / Someone Like You",
    "artista": "Glee",
@@ -1180,7 +1169,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 68,
+   "n": 67,
    "hora": "01:26",
    "titulo": "I'm With You",
    "artista": "Avril Lavigne",
@@ -1191,7 +1180,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 69,
+   "n": 68,
    "hora": "01:30",
    "titulo": "Admirável Chip Novo",
    "artista": "Pitty",
@@ -1203,7 +1192,7 @@ window.RETRO = {
    "poster": 1
   },
   {
-   "n": 70,
+   "n": 69,
    "hora": "01:48",
    "titulo": "What I've Been Looking For",
    "artista": "High School Musical",
@@ -1215,7 +1204,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 71,
+   "n": 70,
    "hora": "01:52",
    "titulo": "Shake It Bololo",
    "artista": "",
@@ -1227,7 +1216,7 @@ window.RETRO = {
    "poster": 3
   },
   {
-   "n": 72,
+   "n": 71,
    "hora": "01:58",
    "titulo": "Sogrão Caprichou",
    "artista": "Luan Santana",
@@ -1238,7 +1227,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 73,
+   "n": 72,
    "hora": "02:01",
    "titulo": "Circus",
    "artista": "Britney Spears",
@@ -1250,7 +1239,7 @@ window.RETRO = {
    "poster": 5
   },
   {
-   "n": 74,
+   "n": 73,
    "hora": "02:05",
    "titulo": "Brand New Chanel$",
    "artista": "Slayyyter",
@@ -1261,7 +1250,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 75,
+   "n": 74,
    "hora": "02:09",
    "titulo": "Tras de Mí",
    "artista": "RBD",
@@ -1274,7 +1263,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 76,
+   "n": 75,
    "hora": "02:14",
    "titulo": "Leão",
    "artista": "Marília Mendonça",
@@ -1286,7 +1275,7 @@ window.RETRO = {
    "poster": 8
   },
   {
-   "n": 77,
+   "n": 76,
    "hora": "02:19",
    "titulo": "Vai Ter Que Rebolar",
    "artista": "Sandy & Junior",
@@ -1298,7 +1287,7 @@ window.RETRO = {
    "poster": 2
   },
   {
-   "n": 78,
+   "n": 77,
    "hora": "02:24",
    "titulo": "The Winner Takes It All",
    "artista": "Mamma Mia!",
@@ -1310,7 +1299,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 79,
+   "n": 78,
    "hora": "02:30",
    "titulo": "Feitiço",
    "artista": "Anitta",
@@ -1322,7 +1311,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 80,
+   "n": 79,
    "hora": "02:35",
    "titulo": "Midnight Sun",
    "artista": "Zara Larsson",
@@ -1334,7 +1323,7 @@ window.RETRO = {
    "poster": 7
   },
   {
-   "n": 81,
+   "n": 80,
    "hora": "02:45",
    "titulo": "Ex-Amor",
    "artista": "Martinho da Vila",
@@ -1345,7 +1334,7 @@ window.RETRO = {
    "poster": 6
   },
   {
-   "n": 82,
+   "n": 81,
    "hora": "02:50",
    "titulo": "We Don't Talk About Bruno",
    "artista": "Encanto",
@@ -1357,7 +1346,7 @@ window.RETRO = {
    "poster": 4
   },
   {
-   "n": 83,
+   "n": 82,
    "hora": "02:55",
    "titulo": "¿Velaske, yo soy guapa?",
    "artista": "Las Meninas",
